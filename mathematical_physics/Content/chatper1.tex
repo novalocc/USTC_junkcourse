@@ -1,7 +1,7 @@
 \chapter{偏微分方程的基本概念和简单方法}
 \section{这门课里我们要解什么方程？}
 在这门课中，因为会大量的出现求导数的操作，所以我们规定：\textcolor{red}{一个下标表示对该变量求一次导数}。例如$u_t = \pdv{u}{t}, u_{xx} = \pdv[2]{u}{x}$。
-同时，物理中的函数性质都很好，所以我们认为$u$想怎么导就怎么导。
+同时，物理中的函数性质都很好，所以我们认为$u$想怎么导就怎么导，求导想怎么换顺序就怎么换。
 整个课程里我们只会碰到三类方程\footnote{对于拉普拉斯算符，这里为了统一不同维度的写法，用的是$\laplacian{}$。按照这门课的记号，以2维情况为例，要写作$\Delta_2$。}：
 \begin{itemize}
     \item 波动方程：$u_{tt} = a^2 \laplacian{u} + f(t, \vb{x})$
@@ -128,7 +128,7 @@
     \end{exercise}
 \end{problembox}
 \section{达朗贝尔公式}
-达朗贝尔公式针对的是齐次的无界弦振动方程的初值问题，即
+达朗贝尔公式针对的是齐次的\textcolor{red}{无界}弦振动方程的初值问题，即
 \begin{equation*}
     \left\{
         \begin{aligned}
@@ -159,7 +159,8 @@
         \end{aligned}
     \right.
 \end{equation*}
-代入就得到\color{red}达朗贝尔公式
+代入就得到达朗贝尔公式
+\color{red}
 \[u(t, x) = \frac{\varphi(x + a t) + \varphi(x - a t)}{2} + \frac{1}{2a}\int_{x - a t}^{x + a t}\psi(s)\dd{s}\]
 \color{black}
 然而实际常常遇见的是非齐次的弦振动方程：
@@ -179,13 +180,12 @@
             \left\{
                 \begin{aligned}
                     &\tilde{u}_{tt} = a^2 \tilde{u}_{xx},\, 0 \leq t < +\infty,\, -\infty < x < +\infty,\\
-                    &\tilde{u}(0, x) = \varphi(x) - v(0, x),\, \tilde{u}_t(0, x) \psi(x) - v_t(0, x).
+                    &\tilde{u}(0, x) = \varphi(x) - v(0, x),\, \tilde{u}_t(0, x) = \psi(x) - v_t(0, x).
                 \end{aligned}
             \right.
         \end{equation*}
     \item 最后用达朗贝尔公式解出$\tilde{u}$，就得到$u = \tilde{u} + v$。
 \end{itemize}
-在考试中我们会用更快的一种分解的方法，见下一小节。尽管如此，练习上面的步骤仍然是有必要的。
 \begin{problembox}
     \begin{example}\label{eg:1.5}
         求解以下非齐次定解问题：
@@ -201,7 +201,7 @@
     \end{example}
     \begin{solution}
         先得找一个特解$v$。找特解的一般方法是，$f$长什么样，我们就猜特解长什么样。所以对于本题，我们设
-        \[v(t, x) = \left(a^2 + b x + c\right)\ee^{-t}\]
+        \[v(t, x) = \left(a x^2 + b x + c\right)\ee^{-t}\]
         代入原方程然后比对一下系数，得到
         \[v(t, x) = \left(x^2 + 2\right) \ee^{-t}\]
         令$\tilde{u} = u - v$，得到
@@ -228,5 +228,160 @@
     \begin{exercise}
         把例\ref{eg:1.5}的$f(t, x)$换成$\sin^2 x$，重新解方程。
     \end{exercise}
+    \begin{exercise}
+        解以下三维波动方程：
+        \begin{equation*}
+            \left\{
+                \begin{aligned}
+                    &u_{tt} = a^2 \left(u_{rr} + \frac{2}{r} u_r\right),\, r, t > 0,\\
+                    &u(0, r) = \varphi(r),\, u_t(0, r) = \psi(r)
+                \end{aligned}
+            \right.
+        \end{equation*}
+    \end{exercise}
 \end{problembox}
 \section{叠加原理和冲量原理}
+在上一节使用达朗贝尔公式的时候，我们发现如果方程是齐次的，处理起来会很简单。
+但如果方程不是齐次的，求解就会有一些麻烦。其实我们总希望定解问题（包括方程和定解条件）是齐次的。
+使用叠加原理和冲量原理就可以消除这些非齐次项。
+\subsection{叠加原理}
+回忆线性代数的知识：微分运算是线性的。这启发我们，对于一个复杂的例子，可以拆分成若干个相对容易一些的问题。
+我们用一个例子来说明\footnote{注意这个问题是在有界区域进行，所以不能用前面达朗贝尔公式的做法。}：
+\begin{problembox}
+    \begin{example}
+        将下面的弦振动方程做分解：
+        \begin{equation*}
+            \left\{
+                \begin{aligned}
+                    &u_{tt} = a^2 u_{xx} + f(t, x),\, 0 \leq t < +\infty,\, 0< x < l,\\
+                    &u(0, x) = g_1(x),\, u_t(0, x) = g_2(x),\\
+                    &u(t, 0) = \psi_1(t),\, u_x(t, l) = \psi_2(t).
+                \end{aligned}
+            \right.
+        \end{equation*}
+    \end{example}
+    \begin{solution}
+        我们分三步去分解这个问题。首先，\textcolor{red}{把边界条件变成齐次的}，设$v(t, x) = \psi_1(x) + x\psi_2(t)$，然后令$\tilde{u} = u - v$，这样就得到
+        \begin{equation*}
+            \left\{
+                \begin{aligned}
+                    &\tilde{u}_{tt} = a^2 \tilde{u}_{xx} + {\tilde{f}}(t, x),\, 0 \leq t < +\infty,\, 0 < x < l,\\
+                    &\tilde{u}(0, x) = {\tilde{g}_1}(x),\, \tilde{u}_t(0, x) = {\tilde{g}_2}(x),\\
+                    &\tilde{u}(t, 0) = 0,\, \tilde{u}_x(t, l) = 0
+                \end{aligned}
+            \right.
+        \end{equation*}
+        其中${\tilde{f}}(t, x) = f - {\psi_1}''(t) - x{\psi_2}''(t)$，${\tilde{g}_1}(x) = g_1 - \psi_1(0) - x \psi_2(0)$，${\tilde{g}_2}(x) = g_2 - \psi_1(0) - x \psi_2(0)$。
+        接下来把上面的方程分解掉。先\textcolor{red}{只保留初始条件的非齐次项}，即设$u_1$满足
+        \begin{equation*}
+            \left\{
+                \begin{aligned}
+                    &{u_1}_{tt} = a^2 {u_2}_{xx},\, 0 \leq t < +\infty,\, 0 < x < l,\\
+                    &{u_1}(0, x) = \tilde{g}_1(x),\, {u_1}_t(0, x) = \tilde{g}_2(x),\\
+                    &{u_1}(t, 0) = 0,\, {u_1}_x(t, l) = 0
+                \end{aligned}
+            \right.
+        \end{equation*}
+        然后\textcolor{red}{只保留方程的非齐次项}，即设$u_2$满足
+        \begin{equation*}
+            \left\{
+                \begin{aligned}
+                    &{u_2}_{tt} = a^2 {u_2}_{xx} + \tilde{f}(t, x),\, 0 \leq t < +\infty,\, 0 < x < l,\\
+                    &{u_2}(0, x) = 0,\, {u_2}_t(0, x) = 0,\\
+                    &{u_2}(t, 0) = 0,\, {u_2}_x(t, l) = 0
+                \end{aligned}
+            \right.
+        \end{equation*}
+        $u_1$的求解，可以用第二章的分离变量法。而$u_2$的求解可以冲量定理。这样就得到了
+        \[\tilde{u} = u_1 + u_2 \Rightarrow u = v + u_1 + u_2\]
+    \end{solution}
+\end{problembox}
+\subsection{冲量原理}
+冲量原理的适用范围：非齐次的波动方程或者热方程（可以高维）+平凡初始条件（就是为0）+其次边界条件（也可以没有边界条件）。我们先直接给出弦振动方程方程的冲量原理：
+\begin{theorem}{弦振动方程的冲量原理}{thm:1.1}
+    如果定解问题
+    \begin{equation*}
+        \left\{
+            \begin{aligned}
+                &w_{tt} = a^2 w_{xx} ,\, \tau \leq t < +\infty,\, 0< x < l,\\
+                &w(\tau, x; t) = 0,\, w_t(\tau, x; t) =  f(\tau, x),\\
+                &w(\tau, 0; t) = 0,\, w_x(\tau, l; t) = 0
+            \end{aligned}
+        \right.
+    \end{equation*}
+    的解为$w(\tau, x; t)$，那么定解问题
+    \begin{equation*}
+        \left\{
+            \begin{aligned}
+                &u_{tt} = a^2 u_{xx} + f(t, x),\, 0 \leq t < +\infty,\, 0< x < l,\\
+                &u(0, x) = 0,\, u_t(0, x) = 0,\\
+                &u(t, 0) = 0,\, u_x(t, l) = 0
+            \end{aligned}
+        \right.
+    \end{equation*}
+    的解为
+    \[u(t, x) = \int_{0}^{t} w(\tau, x; t) \dd{\tau}\]
+\end{theorem}
+$w(\tau, x; t)$这个记号很让人费解，我们不必理会它。
+实际操作时，只需要仿照下面的例子进行就可以了。
+\begin{problembox}
+    \begin{example}\label{eg:1.7}
+        解下列定解问题：
+        \begin{equation*}
+            \left\{
+                \begin{aligned}
+                    &u_{tt} = a^2 u_{xx} + x^2 \ee^{-t} - t \sin x,\, 0 \leq t < +\infty,\, -\infty< x < +\infty,\\
+                    &u(0, x) = 0,\, u_t(0, x) = 0.
+                \end{aligned}
+            \right.
+        \end{equation*}
+    \end{example}
+    \begin{solution}
+        这个问题可以直接用冲量原理去做。先要解方程
+        \begin{equation*}
+            \left\{
+                \begin{aligned}
+                    &w_{tt} = a^2 w_{xx},\, \tau \leq t < +\infty,\, -\infty< x < +\infty,\\
+                    &w(\tau, x; t) = 0,\, w_t(\tau, x; t) = x^2 \ee^{-\tau}
+                \end{aligned}
+            \right.
+        \end{equation*}
+        这可以直接套达朗贝尔公式。套的方法是，先写$w(\tau, x; t) = w(t - \tau, x)$，然后把原来公式里面所有的“$t$”全部换成“$t - \tau$”：
+        \begin{align*}
+            w(\tau, x; t) &= w(t - \tau, x) = \frac{1}{2}\int_{x + {\color{red}\left(t - \tau\right)}}^{x - {\color{red}\left(t - \tau\right)}} \left(s^2 \ee^{-\tau} - \tau \sin s\right) \dd{s}\\
+            &= x^2 \left(t - \tau\right) \ee^{-\tau} + \frac{1}{3}\left(t - \tau\right)^3 \ee^{-\tau} - \tau \sin x \sin(t - \tau)
+        \end{align*}
+        然后用冲量原理就可以了：
+        \[u(t, x) = \int_{0}^{t} w(\tau, x; t) \dd{\tau} = x^2\left(\ee^{-t} + t - 1\right) + 2 \ee^{-t} + \frac{t^3}{3} - t^2 + 2t - 2 - t \sin x + \sin x \sin t\]
+    \end{solution}
+\end{problembox}
+\begin{problembox}
+    \begin{exercise}
+        把例\ref{eg:1.7}的初始条件换成$u(0, x) = x,\, u_t(0, x) = \sin x$，重新解方程。
+        \\要求：按照这一节的分解方法去做，请思考如何消去初始条件。
+    \end{exercise}
+\end{problembox}
+
+下面我们给出热传导方程的冲量原理，其应用方法和上面的例题是一致的。
+\begin{theorem}{热传导方程的冲量原理}{thm:1.2}
+    如果定解问题
+    \begin{equation*}
+        \left\{
+            \begin{aligned}
+                &w_{t} = a^2 \Delta_3 w,\, \tau \leq t < +\infty,\, -\infty< x, y, z < +\infty,\\
+                &w(\tau, x, y, z; t) = 0,\, w_t(\tau, x, y, z; t) = f(\tau, x, y, z)
+            \end{aligned}
+        \right.
+    \end{equation*}
+    的解为$w(\tau, x, y, z; t)$，那么定解问题
+    \begin{equation*}
+        \left\{
+            \begin{aligned}
+                &u_{t} = a^2 \Delta_3 u,\, 0 \leq t < +\infty,\, -\infty< x, y, z < +\infty,\\
+                &u(t, x, y, z) = 0,\, u_t(t, x, y, z) = 0
+            \end{aligned}
+        \right.
+    \end{equation*}
+    的解为
+    \[u(t, x, y, z) = \int_{0}^{t} w(\tau, x, y, z; \tau) \dd{\tau}\]
+\end{theorem}
