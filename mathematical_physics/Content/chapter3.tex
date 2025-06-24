@@ -66,7 +66,8 @@
 \[L[f] = L(p) = \int_{0}^{+\infty} f(x) \ee^{-p t} \dd{t}\]
 这里的$p$实际上是定义在上半复平面上的复数，但实际用起来没人关心。逆变换是
 \[f(t) = \frac{1}{2 \pi \ii} \int_{-\infty}^{+\infty} L(\sigma + \ii \lambda) \ee^{\ii \lambda t} \dd{\lambda}\]
-其实我们也根本不会用到逆变换的表达式。
+如果我们还记得留数定理，会发现上面的式子也可以写成
+\[f(t) = \sum_i \Res[L(p) \ee^{p t}, p_i]\]
 
 下面罗列出了拉普拉斯变换的性质，我们也只需要记住。
 \begin{itemize}
@@ -156,4 +157,83 @@
 
 \section{基本解和格林函数}
 \subsection{基本解}
+在了解基本解之前，我们需要先回顾一下$\delta$函数的概念。对于做题而言，只需要记住$\delta$函数的以下特性就好：
+\begin{itemize}
+    \item 定义：
+        \begin{equation*}
+            \delta(x) = 
+            \left\{
+                \begin{aligned}
+                    &0, x \neq 0,\\
+                    &+\infty, x = 0
+                \end{aligned}
+            \right.
+        \end{equation*}
+        \[\int_{-\infty}^{+\infty} \delta(x) \dd{x} = 1\]
+    \item 筛选性质
+        \[{\color{red}{\int_{-\infty}^{+\infty} \delta(x - x_0) f(x) \dd{x} = f(x_0)}}\]
+    \item 傅里叶变换
+        \[F[\delta(x)] = 1,\, F^{-1}[1] = \delta(x)\]
+        实际上就是记住下面的等式：
+        \[{\color{red}\frac{1}{2 \pi} \int_{-\infty}^{+\infty} \ee^{\ii \lambda \left(x - x_0\right)} = \delta(x - x_0)}\]
+\end{itemize}
+\begin{problembox}
+    \begin{example}\label{eg:3.3}
+        解初始问题
+        \begin{equation*}
+            \left\{
+                \begin{aligned}
+                    &u_{tt} = a^2 u_{xx}, 0 \leq t < +\infty,\, -\infty < x < +\infty,\\
+                    &u(0, x) = \delta(x - \xi),\, u_t(0, x) = 0
+                \end{aligned}
+            \right.
+        \end{equation*}
+    \end{example}
+    \begin{solution}
+        做傅里叶变换。记
+        \[U(t, \lambda) = \int_{-\infty}^{+\infty} u(t, x) \ee^{-\ii \lambda x} \dd{x}\]
+        则有
+        \begin{equation*}
+            \left\{
+                \begin{aligned}
+                    &U_{tt} = -a^2 \lambda^2 U, 0 \leq t < +\infty, -\infty < \lambda < +\infty\\
+                    &U(0, \lambda) = \ee^{-\ii \lambda \xi},\, U_t(0, \lambda) = 0
+                \end{aligned}
+            \right.
+        \end{equation*}
+        解之，得到
+        \[U(t, \lambda) = C_1(\lambda) \ee^{\ii a \lambda t} + C_2(\lambda) \ee^{-\ii a \lambda t}\]
+        根据初始条件得到
+        \[U(t, \lambda) = \frac{1}{2}\left(\ee^{\ii \lambda \left(-\xi + a t\right)} + \ee^{\ii \lambda \left(-\xi - a t\right)}\right)\]
+        反变换就得到
+        \[u(t, x) = \frac{1}{2}\left(\delta(x - \xi - a t) + \delta(x - \xi + a t)\right)\]
+    \end{solution}
+\end{problembox}
+
+一般来说，对于热方程和波动方程，方程本身总具有形式$u_t = Lu + f(t, M)$或者$u_{tt} = Lu + f(t, M)$，
+这里的$L$是一个空间线性微分算子，以一维情况为例，就是$\pdv{}{x}$、$\pdv[2]{}{x}$等等的线性组合，$M$用于标记位置坐标。
+然而，通过前面的学习我们发现，即便对于同一个方程本身而言，不同的边界条件也会给出不同的解。
+基本解法的思想是，对同一个方程，用统一的方式去处理不同的边界条件，从而简化思考的流程。下面我们将直接给出关于基本解的定义和定理：
+\begin{theorem}{热方程的基本解}{thm:3.1}
+    称初值问题
+    \begin{equation*}
+        \left\{
+            \begin{aligned}
+                &U_{t, M} = LU, 0 \leq t < +\infty, M \in \mathbb{R}^n\\
+                &U(0, M) = \delta(M)
+            \end{aligned}
+        \right.
+    \end{equation*}
+    的解$U(t, M)$为方程$U_{t, M} = LU$的基本解，则方程
+    \begin{equation*}
+        \left\{
+            \begin{aligned}
+                &t_{t, M} = Lu + f(t, M), 0 \leq t < +\infty, M \in \mathbb{R}^n\\
+                &U(0, M) = \varphi(M)
+            \end{aligned}
+        \right.
+    \end{equation*}
+    的解为
+    \[u(t, M) = U(t, M) * \varphi(M) + \int_{0}^{t} f(\tau, M) * U(t - \tau, M) \dd{\tau}\]
+\end{theorem}
 \subsection{格林函数}

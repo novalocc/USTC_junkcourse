@@ -8,9 +8,11 @@
 
 % --- 常用宏包 ---
 \RequirePackage{xparse}
+\RequirePackage{physics}
 \RequirePackage{amsmath}
 \RequirePackage{amsthm}
-\RequirePackage{physics}
+\RequirePackage{amsfonts}
+\RequirePackage{amssymb}
 \RequirePackage{graphicx}
 \RequirePackage{siunitx}
 \RequirePackage[dvipsnames, svgnames]{xcolor}
