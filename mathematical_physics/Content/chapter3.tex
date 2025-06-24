@@ -1,4 +1,5 @@
 \chapter{积分变换法和格林函数}
+本章主要针对的是无界空间中的方程求解。
 \section{积分变换}
 这里会用到的变换在数学分析和复变函数课中都应该了解过。
 \subsection{傅里叶变换}
@@ -13,10 +14,10 @@
     \item 频移性：$F[f(x) \ee^{\ii \lambda_0 x}] = F(\lambda - \lambda_0)$
     \item 位移性：$F[f(x + a)] = F(\lambda) \ee^{\ii \lambda a}$
     \item 相似性：$a > 0, \, F[f(ax)] = \frac{1}{a} F(\frac{\lambda}{a})$
-    \item \textcolor{red}{微分性质}: $F[f^{(n)}] = (\ii \lambda)^n F[\lambda]$
+    \item \textcolor{red}{微分性质}\footnote{这条性质非常重要，它把求导运算化为了乘积运算，从而简化了方程的求解。}: $F[f^{(n)}] = (\ii \lambda)^n F[\lambda]$
     \item \textcolor{red}{卷积性质}：$F[f * g] = F[f] \times F[g]$。这里卷积定义为
         \[(f * g)(x) = \int_{-\infty}^{+\infty} f(s) g(x - s) \dd{s}\]
-        这个性质经常用来求解的逆变换
+        这个性质经常用来求解逆变换
         \[F^{-1}[F G] = F^{-1}[F] * F^{-1}[G]\]
 \end{itemize}
 
@@ -27,7 +28,7 @@
 本质上这就是高斯积分
 \[\int_{0}^{+\infty} \ee^{-a x^2} \dd{x} = \sqrt{\frac{\pi}{a}}\]
 
-我们也会碰到高维的傅里叶变换，实际上我们只会关心微分性质和卷积性质，这其实只需要把导数换成偏导数，然后把卷积从一重积分变成n重积分就可以了。
+我们也会碰到高维的傅里叶变换，实际上我们只会关心微分性质和卷积性质，这其实只需要把导数换成偏导数，然后把卷积从一重积分变成$n$重积分就可以了。
 \begin{problembox}
     \begin{example}
         求解热传导方程的初值问题
@@ -60,7 +61,7 @@
 \end{problembox}
 
 \subsection{拉普拉斯变换}
-拉普拉斯变换用的不是很多，如果要解决的是$t \in [0, +\infty)$的初值问题，我们或许会考虑它。我见过的唯一的例子就是求解半无限长弦问题。
+拉普拉斯变换用的不是很多，如果要解决的是$0 \leq t < +\infty$的初值问题，我们或许会考虑它。我见过的唯一的例子就是求解半无限长弦问题。
 
 拉普拉斯变换的定义是
 \[L[f] = L(p) = \int_{0}^{+\infty} f(x) \ee^{-p t} \dd{t}\]
@@ -157,7 +158,8 @@
 
 \section{基本解和格林函数}
 \subsection{基本解}
-在了解基本解之前，我们需要先回顾一下$\delta$函数的概念。对于做题而言，只需要记住$\delta$函数的以下特性就好：
+在了解基本解之前，我们需要先回顾一下$\delta$函数的概念。物理上引入$\delta$函数，可以考虑质点的密度分布，或者点电荷的电荷密度分布。
+但对于做题而言，只需要记住$\delta$函数的以下性质就好：
 \begin{itemize}
     \item 定义：
         \begin{equation*}
@@ -174,9 +176,12 @@
         \[{\color{red}{\int_{-\infty}^{+\infty} \delta(x - x_0) f(x) \dd{x} = f(x_0)}}\]
     \item 傅里叶变换
         \[F[\delta(x)] = 1,\, F^{-1}[1] = \delta(x)\]
-        实际上就是记住下面的等式：
-        \[{\color{red}\frac{1}{2 \pi} \int_{-\infty}^{+\infty} \ee^{\ii \lambda \left(x - x_0\right)} = \delta(x - x_0)}\]
+        实际上就是记住下面的等式\footnote{因为$\sin x$是奇函数，所以如果用欧拉公式展开$\ee^{\ii x}$并且对$x$积分，$\sin x$的结果一定是0。}：
+        \[{\color{red}\frac{1}{2 \pi} \int_{-\infty}^{+\infty} \ee^{\ii \lambda \left(x - x_0\right)} \dd{\lambda} = \frac{1}{2\pi} \int_{-\infty}^{+\infty} \cos(\lambda(x - x_0)) \dd{\lambda} = \delta(x - x_0)}\]
 \end{itemize}
+我们也会遇到$n$维的$\delta$函数，实际上就是$n$个一维$\delta$函数的乘积：
+\[\delta^{\left(n\right)}(x_1, \dots, x_n) = \prod_{i = 1}^{n}\delta(x_i)\]
+所以$n$维$\delta$函数具有和一维$\delta$函数完全类似的性质。
 \begin{problembox}
     \begin{example}\label{eg:3.3}
         解初始问题
@@ -211,7 +216,7 @@
 \end{problembox}
 
 一般来说，对于热方程和波动方程，方程本身总具有形式$u_t = Lu + f(t, M)$或者$u_{tt} = Lu + f(t, M)$，
-这里的$L$是一个空间线性微分算子，以一维情况为例，就是$\pdv{}{x}$、$\pdv[2]{}{x}$等等的线性组合，$M$用于标记位置坐标。
+这里的$L$是一个空间线性微分算子，以一维情况为例，就是$1$（认为是$0$阶导数）、$\pdv{}{x}$、$\pdv[2]{}{x}$等等的线性组合，$M$用于标记位置坐标。
 然而，通过前面的学习我们发现，即便对于同一个方程本身而言，不同的边界条件也会给出不同的解。
 基本解法的思想是，对同一个方程，用统一的方式去处理不同的边界条件，从而简化思考的流程。下面我们将直接给出关于基本解的定义和定理：
 \begin{theorem}{热方程的基本解}{thm:3.1}
@@ -219,21 +224,180 @@
     \begin{equation*}
         \left\{
             \begin{aligned}
-                &U_{t, M} = LU, 0 \leq t < +\infty, M \in \mathbb{R}^n\\
+                &U_{t} = LU, 0 \leq t < +\infty, M \in \mathbb{R}^n\\
                 &U(0, M) = \delta(M)
             \end{aligned}
         \right.
     \end{equation*}
-    的解$U(t, M)$为方程$U_{t, M} = LU$的基本解，则方程
+    的解$U(t, M)$为方程$u_t = Lu + f(t, M)$的初值问题（也称作柯西问题）的基本解。则方程
     \begin{equation*}
         \left\{
             \begin{aligned}
-                &t_{t, M} = Lu + f(t, M), 0 \leq t < +\infty, M \in \mathbb{R}^n\\
+                &u_t = Lu + f(t, M), 0 \leq t < +\infty, M \in \mathbb{R}^n\\
                 &U(0, M) = \varphi(M)
             \end{aligned}
         \right.
     \end{equation*}
     的解为
     \[u(t, M) = U(t, M) * \varphi(M) + \int_{0}^{t} f(\tau, M) * U(t - \tau, M) \dd{\tau}\]
+    这里卷积的定义为
+    \[f(t_1, M) * g(t_2, M) = \int_{\text{全空间}} f(t_1, M - M_0) g(t_2, M_0) \dd{M_0}\]
 \end{theorem}
+这个公式在直观上也不难理解：
+\[\text{方程的解} = \text{基本解和初始状态的卷积} + \text{非齐次和基本解的卷积}\]
+\begin{problembox}
+    \begin{example}
+        求方程$u_t = a^2 u_{xx} + bu$的柯西问题的基本解，$a>0$。
+    \end{example}
+    \begin{solution}
+        即求解定解问题：
+        \begin{equation*}
+            \left\{
+                \begin{aligned}
+                    &u_t = a^2 u_{xx} + b u, 0 \leq t < +\infty, -\infty < x < +\infty\\
+                    &u(0, x) = \delta(x)
+                \end{aligned}
+            \right.
+        \end{equation*}
+    做傅里叶变换。记
+    \[U(t, \lambda) = \int_{-\infty}^{+\infty} u(t, x) \ee^{\ii \lambda x} \dd{x}\]
+    则有
+    \begin{equation*}
+        \left\{
+            \begin{aligned}
+                &U_t = - a^2 \lambda^2 U + b U, 0 \leq t < +\infty, -\infty < \lambda < +\infty\\
+                &U(0, \lambda) = 1
+            \end{aligned}
+        \right.
+    \end{equation*}
+    这个微分方程很好求解，答案是
+    \[U(t, \lambda) = \ee^{-\left(a^2 \lambda^2 - b\right)t}\]
+    最后就是反变换：
+    \begin{align*}
+        u(t, x) &= \frac{1}{2 \pi} \int_{-\infty}^{+\infty} \ee^{-\left(a^2 \lambda^2 - b\right)t} \ee^{\ii \lambda x} \dd{\lambda}\\
+        &= \frac{1}{2 \pi } \int_{-\infty}^{+\infty} \ee^{-\left(\lambda a \sqrt{t} + \frac{\ii x}{2 a \sqrt{t}}\right)^2 + b t - \frac{x^2}{4 a^2 t}} \dd{\lambda}\\
+        &= \frac{\ee^{b t - \frac{x^2}{4 a^2 t}}}{2 \pi} \times \frac{1}{a\sqrt{t}} \int_{-\infty}^{+\infty} \ee^{-\left(\lambda a \sqrt{t} + \frac{\ii x}{2 a \sqrt{t}}\right)^2} \dd{\left(a \sqrt{t} \lambda\right)}\\
+        &= \frac{\ee^{b t - \frac{x^2}{4 a^2 t}}}{2 \pi} \times \frac{1}{a\sqrt{t}} \int_{-\infty}^{+\infty} \ee^{-\lambda^2} \dd{\lambda}\\
+        &= \frac{\ee^{b t - \frac{x^2}{4 a^2 t}}}{\sqrt{4 a^2 \pi t}}
+    \end{align*}
+    \end{solution}
+\end{problembox}
+\begin{problembox}
+    \begin{exercise}
+        求方程$u_t = a u_x$的柯西问题的基本解。
+    \end{exercise}
+    \begin{exercise}
+        求二维热方程的柯西问题的基本解。
+    \end{exercise}
+\end{problembox}
+
+下面我们给出波动方程的基本解的定义和有关定理：
+\begin{theorem}{波动方程的基本解}{thm:3.2}
+    称初值问题
+    \begin{equation*}
+        \left\{
+            \begin{aligned}
+                &U_{tt} = LU, 0 \leq t < +\infty, M \in \mathbb{R}^n\\
+                &U(0, M) = 0,\, U_t(0, M) = \delta(M)
+            \end{aligned}
+        \right.
+    \end{equation*}
+    的解$U(t, M)$为方程$u_{tt} = Lu + f(t, M)$的初值问题的基本解。则方程
+    \begin{equation*}
+        \left\{
+            \begin{aligned}
+                &u_{tt} = Lu + f\left(t, M\right), 0 \leq t < +\infty, M \in \mathbb{R}^n\\
+                &u(0, M) = \varphi(M),\, u_t(0, M) = \psi(M)
+            \end{aligned}
+        \right.
+    \end{equation*}
+    的解为
+    \[u(t, M) = \pdv{}{t}\left[U(t, M) * \varphi(M)\right] + U(t, M) * \psi(M) + \int_{0}^{t} U(t - \tau, M) * f(\tau, M) \dd{\tau}\]
+\end{theorem}
+我们发现最后的公式和热方程的很像，只是要考虑两个初始条件的贡献。
+\begin{problembox}
+    \begin{example}
+        求三维波动方程的基本解，即求解方程：
+        \begin{equation*}
+            \left\{
+                \begin{aligned}
+                    &U_{tt} = a^3 \Delta_3 U, 0 \leq t < +\infty, -\infty < x, y, z < +\infty\\
+                    &U(0, x, y, z) = 0,\, U_t(0, x, y, z) = \delta(x, y, z)
+                \end{aligned}
+            \right.
+        \end{equation*}
+    \end{example}
+    \begin{solution}
+        做三维的傅里叶变换
+        \[\bar{U}(t, \lambda, \mu, \nu) = \int_{\mathbb{R}^3} u(t, x, y, z) \ee^{-\ii \left(\lambda x + \mu y + \nu z\right)} \dd{x} \dd{y} \dd{z}\]
+        则有
+        \begin{equation*}
+            \left\{
+                \begin{aligned}
+                    &\bar{U}_{tt} = - a^2 \left(\lambda^2 + \mu^2 + \nu^2\right) \bar{U}, 0 \leq t < +\infty, -\infty < \lambda, \mu, \nu < +\infty\\
+                    &\bar{U}(0, \lambda, \mu, \nu) = 0,\, \bar{U}_t(0, \lambda, \mu, \nu) = 1
+                \end{aligned}
+            \right.
+        \end{equation*}
+        这个方程具有很好的球对称性，所以用球坐标
+        \[\lambda = \rho \sin \theta \cos \phi,\, \mu = \rho \sin \theta \sin \phi,\, \nu = \rho \cos \theta\]
+        则
+        \begin{equation*}
+            \left\{
+                \begin{aligned}
+                    &\bar{U}_{tt} = - a^2 \rho^2 \bar{U}, 0 \leq t < +\infty, -\infty < \lambda, \mu, \nu < +\infty\\
+                    &\bar{U}(0, \lambda, \mu, \nu) = 0,\, \bar{U}_t(0, \lambda, \mu, \nu) = 1
+                \end{aligned}
+            \right.
+        \end{equation*}
+        考虑初始条件之后解之：
+        \[\bar{U} = \frac{\sin(a \rho t)}{a \rho}\]
+        最后的任务就是计算傅里叶反变换
+        \[U = \frac{1}{\left(2 \pi\right)^3} \int_{\mathbb{R}^3} \frac{\sin(a \rho t)}{a \rho} \ee^{\ii\left(\lambda x + \mu y + \nu z\right)} \dd{x} \dd{y} \dd{z}\]
+        因为球对称性，所以一定有$U = U(t, r)$。那么$\lambda x + \mu y + \nu z = \rho r \cos \theta$。并且回忆球坐标的积分换元：$\dd{x} \dd{y} \dd{z} = \rho^2 \sin\theta \dd{\rho} \dd{\theta} \dd{\phi}$，最后我们的积分化为
+        \begin{align*}
+            U(t, r) &= \frac{1}{\left(2 \pi\right)^3} \int_{0}^{+\infty} \int_{0}^{2 \pi} \int_{0}^{\pi} \frac{\sin(a \rho t)}{a \rho} \ee^{\ii \rho r \cos \theta} \rho^2 \sin\theta \dd{\rho} \dd{\theta} \dd{\phi}\\
+            &= \frac{1}{\left(2 \pi\right)^2} \int_{0}^{+\infty} \int_{0}^{2 \pi} \ee^{\ii \rho r \cos \theta} \rho^2 \sin\theta \dd{\rho} \dd{\theta}\\
+            &= \frac{1}{\left(2 \pi\right)^2} \int_{0}^{+\infty} \frac{\sin(a \rho t)}{\ii a r} \ee^{\ii \rho r \cos \theta}|_{0}^{\pi} \dd{\rho}\\
+            &= \frac{1}{\left(2 \pi\right)^2} \int_{0}^{+\infty} \frac{2 \sin(\rho r) \sin(a \rho t)}{a r} \dd{\rho}\\
+            &= \frac{1}{8 \pi^2 a r} \int_{-\infty}^{+\infty} \left[\cos(\rho r - a \rho t) - \cos(\rho r  + a \rho t)\right] \dd{\rho}\\
+            &= \frac{1}{4 \pi a r}\left[\delta(r - at) -\delta(r + at)\right]
+        \end{align*}
+        由于$r, a, t > 0$，故有
+        \[U(t, r) = \frac{\delta(r - at)}{4 \pi a r}\]
+    \end{solution}
+\end{problembox}
+\begin{problembox}
+    \begin{exercise}
+        求一维波动方程的基本解。
+    \end{exercise}
+    \begin{exercise}
+        求二维波动方程的基本解。
+    \end{exercise}
+\end{problembox}
 \subsection{格林函数}
+前面的基本解方法针对的是含时的热方程和波动方程\footnote{实际上对不含时间的情况也有基本解的定义，但此时基本解方法和格林函数法没有什么区别。}。对于不含时的泊松方程，我们也有类似的解决方案，即格林函数。
+同样的，我们直接给出定义和定理：
+\begin{theorem}{泊松公式}{thm:3.3}
+    称定解问题
+    \begin{equation*}
+        \left\{
+            \begin{aligned}
+                &\laplacian_{M}{G(M;M_0)} = -\delta(M - M_0),\, M, M_0 \in \Omega,\\
+                &G|_{M \in \partial \Omega} = 0
+            \end{aligned}
+        \right.
+    \end{equation*}
+    的解为泊松方程第I边值问题的格林函数，这里的$\Omega$可以是一维、二维或者三维的区域。则方程
+    \begin{equation*}
+        \left\{
+            \begin{aligned}
+                &\laplacian{u} = -f(M),\, M \in \Omega,\\
+                &u|_{\partial \Omega} = \varphi(M)
+            \end{aligned}
+        \right.
+    \end{equation*}
+    的解为
+    \[u(M) = \int_{V} f(M_0)G(M;M_0) \dd{M_0} - \oint_{\partial V} \varphi(M_0) \pdv{_{M_0}G(M;M_0)}{\vb{n}} \dd{D_0}\]
+    这里$\dd{M_0}$是区域$\Omega$的“体积元”，$\dd{D_0}$是边界$\partial \Omega$的“面积元”。
+\end{theorem}
