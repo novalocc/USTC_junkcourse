@@ -116,14 +116,14 @@
 接下来无非是把上面那一堆东西逆变换回去。先做第一项：
 \[L^{-1}\left[\frac{L[f(t)]}{p^2}\right] = L^{-1}[L(t)] * L^{-1}[\frac{1}{p^2}] = \int_{0}^{t} f(t - s) s \dd{s}\]
 第二项和第一项相比，多乘了一个$\ee^{-p \frac{x}{a}}$。根据延迟性质得到
-\[L^{-a}\left[-\frac{L[f(t)]}{p^2} \ee^{-p \frac{x}{a}}\right] = -\left(\int_{0}^{t - \frac{x}{a}} f\left(t - \frac{x}{a} - s\right) \dd{s}\right) \times h(t - \frac{x}{a})\]
+\[L^{-a}\left[-\frac{L[f(t)]}{p^2} \ee^{-p \frac{x}{a}}\right] = -\left(\int_{0}^{t - \frac{x}{a}} f\left(t - \frac{x}{a} - s\right) s \dd{s}\right) \times h(t - \frac{x}{a})\]
 这两项和起来就是答案了。整理一下，最终的解为
 \begin{equation*}
     u(t, x) = 
     \left\{
         \begin{aligned}
             &\int_{0}^{t} f(t - s) s \dd{s},\, t < \frac{x}{a}\\
-            &\int_{0}^{t} f(t - s) s \dd{s} - \int_{0}^{t - \frac{x}{a}} f\left(t - \frac{x}{a} - s\right) \dd{s},\, t \geq \frac{x}{a}
+            &\int_{0}^{t} f(t - s) s \dd{s} - \int_{0}^{t - \frac{x}{a}} f\left(t - \frac{x}{a} - s\right) s \dd{s},\, t \geq \frac{x}{a}
         \end{aligned}
     \right.
 \end{equation*}
