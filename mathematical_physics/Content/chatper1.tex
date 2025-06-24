@@ -1,0 +1,232 @@
+\chapter{偏微分方程的基本概念和简单方法}
+\section{这门课里我们要解什么方程？}
+在这门课中，因为会大量的出现求导数的操作，所以我们规定：\textcolor{red}{一个下标表示对该变量求一次导数}。例如$u_t = \pdv{u}{t}, u_{xx} = \pdv[2]{u}{x}$。
+同时，物理中的函数性质都很好，所以我们认为$u$想怎么导就怎么导。
+整个课程里我们只会碰到三类方程\footnote{对于拉普拉斯算符，这里为了统一不同维度的写法，用的是$\laplacian{}$。按照这门课的记号，以2维情况为例，要写作$\Delta_2$。}：
+\begin{itemize}
+    \item 波动方程：$u_{tt} = a^2 \laplacian{u} + f(t, \vb{x})$
+    \item 热传导方程：$u_{t} = a^2 \laplacian{u} + f(t, \vb{x})$
+    \item 泊松方程：$\laplacian{u} = f(t, \vb{x})$
+\end{itemize}
+其中$u = t(t, \vb{x})$（对于泊松方程，$u = u(\vb{x})$）是待求的函数。
+特别地，如果上面的$f(t, \vb{x}) = 0$，我们称方程是\textbf{齐次的}。
+
+\section{定解条件}
+地球人都知道，对于一个微分方程，只有方程本身还不能把解确定下来。我们还需要一些限制条件使得方程有唯一解，这就是定解条件。定解条件有两类：
+\begin{enumerate}
+    \item 初始条件：$t = 0$时系统的状态。
+    \item 边界条件：系统的边界状态，可以和时间有关。具体地说，有如下三类：
+        \begin{itemize}
+            \item I类（Dirichlet条件），即系统在边界的取值，如$u(t, 0)$等；
+            \item II类（Neumann条件），即系统在边界处法向导数的取值，如$\pdv{u}{\vb{n}}$等；
+            \item III类（Robin条件），是上面两种条件的线性组合。
+            \item 自然边界条件，比方说温度不能是无穷大；周期边界条件，在柱坐标和球坐标中很常见\footnote{我们后面会见到这两个边界条件的例子。}。
+        \end{itemize}
+\end{enumerate}
+
+定解条件总是一些等式。对于I、II和III类条件，我们可以先通过移项，使一边只有$u$和它的导数。如果另一边是$0$，我们就称该条件是\textbf{齐次的}，否则就是非齐次的。
+\begin{problembox}
+    \begin{example}
+        边界条件$u(t, 0) = 0,\, u_x(t, 0) = 0$是齐次的边界条件。
+    \end{example}
+    \begin{example}
+        初始条件$u(0, x) = \varphi(x),\, u_t(0, x) = \psi(x)$是非齐次的边界条件。
+    \end{example}
+\end{problembox}
+
+\section{线性偏微分方程}
+\subsection{一阶线性偏微分方程}
+这类方程具有形式
+\[\sum_{i}^{n} b_i(x_1, x_2, \dots, x_n) \pdv{u}{x_i} = f(x_1, x_2, \dots, x_n)\]
+求解的方法是：
+\begin{enumerate}
+    \item 写出\color{red}特征方程
+        \[\frac{\dd{x_1}}{b_1} = \frac{\dd{x_2}}{b_2} = \cdots = \frac{\dd{x_n}}{b_n}\]
+        \color{black}
+    \item 根据特征方程，解出$n - 1$个不同的全微分$\dd{\varphi_i} = 0$。设$\xi_i = \varphi_i$，然后补上一个$\xi_n$使得新的变量$\left\{\xi_i\right\}$是相互独立的（即雅可比行列式不为0，但其实根本不需要计算雅可比，一眼就能补出来一个）
+    \item 用新的$\left\{\xi_i\right\}$去换元，求解方程。
+\end{enumerate}
+\begin{problembox}
+    \begin{example}
+        设$u = u(x, y, z)$，求$u_x + \ee^y u_y = \ee^{-y}$的通解。
+    \end{example}
+    \begin{solution}
+        特征方程
+        \[\frac{\dd{x}}{1} = \frac{\dd{y}}{\ee^y} = \frac{\dd{z}}{0}\]
+        找两个全微分，一个是显然的
+        \[\dd{z} = 0 \Rightarrow \xi_1 = z\]
+        另一个是
+        \[\frac{\dd{x}}{1} = \frac{\dd{y}}{\ee^y} \Rightarrow \dd{x + \ee^{-y}} = 0 \Rightarrow \xi_2 = x + \ee^{-y}\]
+        最后补一个，显然补上
+        \[\xi_3 = x\]
+        是满足要求的。下面要做的就是用链式法则替换求导：
+        \[\pdv{}{x} = \sum_{i} \pdv{\xi_i}{x}\pdv{}{\xi_i} = \pdv{}{\xi_2} + \pdv{}{\xi_3}\]
+        \[\pdv{}{y} = \sum_{i} \pdv{\xi_i}{y}\pdv{}{\xi_i} = -\ee^{-y}\pdv{}{\xi_2}\]
+        \[\pdv{}{z} = \sum_{i} \pdv{\xi_i}{z}\pdv{}{\xi_i} = \pdv{}{\xi_1}\]
+        代入原方程，得到
+        \[u_{\xi_3} = \xi_2 - \xi_3\]
+        这就可以直接积分了：
+        \[u = f(\xi_1, \xi_2) + \int_{0}^{\xi_3}\left(\xi_2 - s\right) \dd{s} = f\left(\xi_1, \xi_2\right) + \xi_2 \xi_3 - \frac{\xi_3^2}{2} = f(z, x + \ee^{-y}) + x \ee^{-y} + \frac{x^2}{2}\]
+        其中$f$是任意一个二元函数。
+    \end{solution}
+\end{problembox}
+\begin{problembox}
+    \begin{exercise}
+        设$u = u\left(t, x\right)$，求解以下问题：
+        \begin{equation*}
+            \left\{
+                \begin{aligned}
+                    &u_t = a u_x,\, t >0,\, -\infty < x < +\infty, \\
+                    &u(0, x) = \sin x.
+                \end{aligned}
+            \right.
+        \end{equation*}
+    \end{exercise}
+\end{problembox}
+\subsection{二阶线性偏微分方程}
+这种方程的形式是
+\[A(x, y) u_{xx} + 2 B(x, y) u_{xy} + C(x, y) u_{yy} + D(x, y) u_x + E(x, y) u_y + F(x, y) u = 0\]
+解法是
+\begin{enumerate}
+    \item 写出\color{red}特征方程
+        \[\frac{A}{\left(\dd{x}\right)^2} - \frac{2B}{\dd{x}\dd{y}} + \frac{C}{\left(\dd{y}\right)^2} = 0\]
+        \color{black}
+    \item 求解特征方程，有三种情况：
+        \begin{itemize}
+            \item 双曲型，即有两个实的全微分$\dd{\varphi} = 0,\, \dd{\psi} = 0$，作换元$\xi = \varphi,\, \eta = \psi$。得到的方程往往具有形式$u_{\xi \eta} = \dots$。
+            \item 椭圆型，即有两个复的全微分$\dd{(\varphi + \ii \psi)} = 0,\, \dd{(\varphi - \ii \psi)} = 0$，作换元$\xi = \varphi,\, \eta = \psi$。得到的方程往往具有形式$u_{\xi \xi} + u_{\eta \eta} = \dots$。
+            \item 双曲型，即只有一个实的全微分$\dd{\varphi} = 0$，作换元$\xi = \varphi$，然后补一个$\eta = \psi$（当然要独立，即雅可比不为0）。得到的方程往往具有形式$u_{\xi \xi} = \dots$。
+        \end{itemize}
+\end{enumerate}
+\begin{problembox}
+    \begin{example}
+        设$u = u(x, y)$，求$u_{xx} + 3u_{xy} + 2u_{yy} = 0$的通解。
+    \end{example}
+    \begin{solution}
+        特征方程
+        \[\frac{1}{\left(\dd{x}\right)^2} - \frac{3}{\dd{x}\dd{y}} + \frac{2}{\left(\dd{y}\right)^2} = 0\]
+        因式分解一下：
+        \[\left(\frac{1}{\dd{x}} - \frac{1}{\dd{y}}\right)\left(\frac{1}{\dd{x}} - \frac{2}{\dd{y}}\right) = 0\]
+        这就得到了
+        \[\xi = x - y,\, \eta = 2x - y\]
+        然后作导数的替换。先算一阶导：
+        \[\pdv{}{x} = \pdv{}{\xi} + 2\pdv{}{\eta},\, \pdv{}{y} = -\pdv{}{\xi} - \pdv{}{\eta}\]
+        这样可以帮助我们很快算出二阶导：
+        \[\pdv[2]{}{x} = \left(\pdv{}{\xi} + 2\pdv{}{\eta}\right)^2 = \pdv[2]{}{\xi} + 4\pdv{}{\xi}{\eta} + 4\pdv[2]{}{\eta}\]
+        \[\pdv{}{x}{y} = \left(\pdv{}{\xi} + 2\pdv{}{\eta}\right)\left(-\pdv{}{\xi} - \pdv{}{\eta}\right) = -\pdv[2]{}{\xi} - 3\pdv{}{\xi}{\eta} - 2 \pdv[2]{}{\eta}\]
+        \[\pdv[2]{}{y} = \left(-\pdv{}{\xi} - \pdv{}{\eta}\right)^2 = \pdv[2]{}{\xi} + 2 \pdv{}{\xi}{\eta} + \pdv[2]{}{\eta}\]   
+        代入原方程，得到
+        \[u_{\xi \eta} = \xi - \eta \Rightarrow u_\xi = \xi \eta - \frac{\eta^2}{2} + f\left(\xi\right)\]
+        于是
+        \[u = \frac{\xi^2}{2} - \frac{\xi \eta^2}{2} + f(\xi) + g(\eta) = \frac{3 x^2 y - 2 x^3 - x y^2}{2} + f(x - y) + g(2x - y)\]     
+        其中$f$和$g$是任意一个一元函数。
+    \end{solution}
+\end{problembox}
+\begin{problembox}
+    \begin{exercise}
+        设$u = u(x, y)$，求$u_{xx} + 2 u_{xy} + u_{yy} = 0$的通解。
+    \end{exercise}
+\end{problembox}
+\section{达朗贝尔公式}
+达朗贝尔公式针对的是齐次的无界弦振动方程的初值问题，即
+\begin{equation*}
+    \left\{
+        \begin{aligned}
+            &u_{tt} = a^2 u_{xx},\, 0 \leq t < +\infty,\, -\infty < x < +\infty,\\
+            &u(0, x) = \varphi(x),\, u_t(0, x) = \psi(x).
+        \end{aligned}
+    \right.
+\end{equation*}
+为此，需要先求$u_{tt} - a^2 u_{xx} = 0$的通解。这在上一小节已经学过，写出特征方程
+\[\frac{1}{\left(\dd{x}\right)^2} - \frac{a^2}{\left(\dd{y}\right)^2} = 0 \Rightarrow \xi = x - a t,\, \eta = x + at\]
+原方程就化为
+\[u_{\xi \eta} = 0 \Rightarrow u = f(\xi) + g(\eta) = f(x - a t) + g(x + a t)\]
+下一步是根据初始条件解出两个待定函数
+\begin{equation*}
+    \left\{
+        \begin{aligned}
+            &f(x) + g(x) = \varphi(x),\\
+            &f'(x) - g'(x) = \frac{\psi(x)}{a}.
+        \end{aligned}
+    \right.
+\end{equation*}
+解得
+\begin{equation*}
+    \left\{
+        \begin{aligned}
+            &f(x) = \frac{1}{2}\varphi(x) + \frac{1}{2a} \int_{0}^{x} \psi(s) \dd{s} + C,\\
+            &g(x) = \frac{1}{2}\varphi(x) - \frac{1}{2a} \int_{0}^{x} \psi(s) \dd{s} - C.
+        \end{aligned}
+    \right.
+\end{equation*}
+代入就得到\color{red}达朗贝尔公式
+\[u(t, x) = \frac{\varphi(x + a t) + \varphi(x - a t)}{2} + \frac{1}{2a}\int_{x - a t}^{x + a t}\psi(s)\dd{s}\]
+\color{black}
+然而实际常常遇见的是非齐次的弦振动方程：
+\begin{equation*}
+    \left\{
+        \begin{aligned}
+            &u_{tt} = a^2 u_{xx} + f(t, x),\, 0 \leq t < +\infty,\, -\infty < x < +\infty,\\
+            &u(0, x) = \varphi(x),\, u_t(0, x) = \psi(x).
+        \end{aligned}
+    \right.
+\end{equation*}
+解题方法如下：
+\begin{itemize}
+    \item 先找方程$v_{tt} = a^2 v_{xx} + f(t, x)$的一个特解$v(t, x)$\footnote{关于如何找特解，请大家自己询问一下AI，或者翻一下数分B2的教材。}；
+    \item 然后用$\tilde{u} = u - v$建立新的初值问题
+        \begin{equation*}
+            \left\{
+                \begin{aligned}
+                    &\tilde{u}_{tt} = a^2 \tilde{u}_{xx},\, 0 \leq t < +\infty,\, -\infty < x < +\infty,\\
+                    &\tilde{u}(0, x) = \varphi(x) - v(0, x),\, \tilde{u}_t(0, x) \psi(x) - v_t(0, x).
+                \end{aligned}
+            \right.
+        \end{equation*}
+    \item 最后用达朗贝尔公式解出$\tilde{u}$，就得到$u = \tilde{u} + v$。
+\end{itemize}
+在考试中我们会用更快的一种分解的方法，见下一小节。尽管如此，练习上面的步骤仍然是有必要的。
+\begin{problembox}
+    \begin{example}\label{eg:1.5}
+        求解以下非齐次定解问题：
+        \begin{equation*}
+            \left\{
+                \begin{aligned}
+                    &u_{tt} = u_{xx} + f(t, x),\, 0 \leq t < +\infty,\, -\infty < x < +\infty,\\
+                    &u(0, x) = x,\, u_t(0, x) = \sin x
+                \end{aligned}
+            \right.
+        \end{equation*}
+        其中$f(t, x) = x^2 \ee^{-t}$。
+    \end{example}
+    \begin{solution}
+        先得找一个特解$v$。找特解的一般方法是，$f$长什么样，我们就猜特解长什么样。所以对于本题，我们设
+        \[v(t, x) = \left(a^2 + b x + c\right)\ee^{-t}\]
+        代入原方程然后比对一下系数，得到
+        \[v(t, x) = \left(x^2 + 2\right) \ee^{-t}\]
+        令$\tilde{u} = u - v$，得到
+        \begin{equation*}
+            \left\{
+                \begin{aligned}
+                    &\tilde{u}_{tt} = \tilde{u}_{xx},\, 0 \leq t < +\infty,\, -\infty < x < +\infty,\\
+                    &\tilde{u}(0, x) = x - x^2 - 2,\, \tilde{u}_t(0, x) = \sin x + x^2 + 2
+                \end{aligned}
+            \right.
+        \end{equation*}
+        下面就是愉快的套公式环节：
+        \[\tilde{u}(t, x) = \frac{\left(x + t\right) - \left(x + t\right)^2 - 2 + \left(x - t\right) - \left(x - t\right)^2 - 2}{2} + \frac{1}{2}\int_{x - t}^{x + t} \left(\sin s + s^2 + 2\right) \dd{s}\]
+        完成计算，结果是
+        \[\tilde{u}(t, x) = -x^2 + x - 2 - t^2 + \sin x \sin t + x^2 t + \frac{t^3}{3} + 2 t\]
+        从而
+        \[u(t, x) = \tilde{u} + v = -x^2 + x - 2 - t^2 + \sin x \sin t + x^2 t + \frac{t^3}{3} + 2 t + \left(x^2 + 2\right) \ee^{-t}\]
+    \end{solution}
+\end{problembox}
+\begin{problembox}
+    \begin{exercise}
+        把例\ref{eg:1.5}的$f(t, x)$换成$x \cos 2t$，重新解方程。
+    \end{exercise}
+    \begin{exercise}
+        把例\ref{eg:1.5}的$f(t, x)$换成$\sin^2 x$，重新解方程。
+    \end{exercise}
+\end{problembox}
+\section{叠加原理和冲量原理}

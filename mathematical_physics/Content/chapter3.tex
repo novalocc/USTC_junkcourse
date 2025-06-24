@@ -1,0 +1,159 @@
+\chapter{积分变换法和格林函数}
+\section{积分变换}
+这里会用到的变换在数学分析和复变函数课中都应该了解过。
+\subsection{傅里叶变换}
+如果求解的区域是无界区域，我们经常考虑傅里叶变换。不同教材对傅里叶变换的定义可能会不同。这门课采用的定义是
+\[F\left[f\right] = F\left(\lambda\right) = \int_{-\infty}^{+\infty} f\left(x\right) \ee^{-\ii\lambda x} \dd{x}\]
+对应的逆变换为
+\[f\left(x\right) = \frac{1}{2 \pi} \int_{-\infty}^{+\infty} F\left(\lambda\right) \ee^{\ii \lambda x} \dd{\lambda}\]
+
+下面罗列出了傅里叶变换的性质，我们不关心这些性质是怎么来的，记住就好。
+\begin{itemize}
+    \item 线性性：$F\left[C_1 f + C_2 g\right] = C_1 F\left[f\right] + C_2 F\left[g\right]$
+    \item 频移性：$F\left[f\left(x\right) \ee^{\ii \lambda_0 x}\right] = F\left(\lambda - \lambda_0\right)$
+    \item 位移性：$F\left[f\left(x + a\right)\right] = F\left(\lambda\right) \ee^{\ii \lambda a}$
+    \item 相似性:$a > 0, \, F\left[f\left(ax\right)\right] = \frac{1}{a} F\left(\frac{\lambda}{a}\right)$
+    \item \textcolor{red}{微分性质}: $F\left[f^{\left(n\right)}\right] = \left(\ii \lambda\right)^n F\left[\lambda\right]$
+    \item \textcolor{red}{卷积性质}：$F[f * g] = F\left[f\right] \times F\left[g\right]$。这里卷积定义为
+        \[\left(f * g\right)\left(x\right) = \int_{-\infty}^{+\infty} f\left(s\right) g\left(x - s\right) \dd{s}\]
+        这个性质经常用来求解的逆变换
+        \[F^{-1}\left[F G\right] = F^{-1}\left[F\right] * F^{-1}\left[G\right]\]
+\end{itemize}
+
+还需要记住的是两个及其重要的公式
+\color{red}
+\[F\left[\ee^{- a x^2}\right] = \sqrt{\frac{\pi}{a}} \ee^{-\frac{\lambda^2}{4a}},\, F^{-1}\left[\ee^{a \lambda^2}\right] = \frac{1}{\sqrt{4 \pi a}} \ee^{-\frac{x^2}{4a}}\]
+\color{black}
+本质上这就是高斯积分
+\[\int_{0}^{+\infty} \ee^{-a x^2} \dd{x} = \sqrt{\frac{\pi}{a}}\]
+
+我们也会碰到高维的傅里叶变换，实际上我们只会关心微分性质和卷积性质，这其实只需要把导数换成偏导数，然后把卷积从一重积分变成n重积分就可以了。
+\begin{problembox}
+    \begin{example}
+        求解热传导方程的初值问题
+        \begin{equation*}
+            \left\{
+                \begin{aligned}
+                    &u_t = u_{xx} + u,\, -\infty < x < +\infty,\, 0 \leq t < +\infty,\\
+                    &u\left(0, x\right) = \ee^{-x^2},\, -\infty < x < +\infty
+                \end{aligned}
+            \right.
+        \end{equation*}
+    \end{example}
+    \begin{solution}
+        做傅里叶变换。记
+        \[\bar{u}\left(t, \lambda\right) = \int_{-\infty}^{+\infty} u\left(t, x\right) \ee^{- \ii \lambda x} \dd{x}\]
+        根据微分性质，得到
+        \[\bar{u}_t = -\lambda^2 \bar{u} + \bar{u} \Rightarrow \bar{u}\left(t, \lambda\right) = C\left(\lambda\right) \ee^{-\left(\lambda^2 - 1\right)t}\]
+        由初始条件，得到
+        \[\bar{u}\left(0, \lambda\right) = F\left[\ee^{-x^2}\right] \Rightarrow C\left(\lambda\right) = F\left[\ee^{-x^2}\right]\]
+        所以逆变换回去就可以了。要注意逆变换是对$\lambda$做变换
+        \[u\left(t, x\right) = F^{-1}\left[F\left[\ee^{-x^2}\right]\right] * F^{-1}\left[\ee^{-\left(\lambda^2 - 1\right)t}\right] = \ee^{-x^2} * \left(\frac{\ee^t}{\sqrt{4 \pi t}} \ee^{\frac{x^2}{4t}}\right) = \frac{\ee^{t}}{\sqrt{4 \pi t}}\int_{-\infty}^{+\infty} \ee^{-\left(x - s\right)^2} \ee^{-\frac{s^2}{4t}}\]
+        配一下方，然后用高斯积分公式，得到结果为
+        \[u\left(t, x\right) = \frac{1}{\sqrt{1 + 4t}} \ee^{t - \frac{x^2}{1 + 4t}}\]
+    \end{solution}
+\end{problembox}
+\begin{problembox}
+    \begin{exercise}
+        用傅里叶变换推导达朗贝尔公式。
+    \end{exercise}
+\end{problembox}
+
+\subsection{拉普拉斯变换}
+拉普拉斯变换用的不是很多，如果要解决的是$t \in [0, +\infty)$的初值问题，我们或许会考虑它。我见过的唯一的例子就是求解半无限长弦问题。
+
+拉普拉斯变换的定义是
+\[L\left[f\right] = L\left(p\right) = \int_{0}^{+\infty} f\left(x\right) \ee^{-p t} \dd{t}\]
+这里的$p$实际上是定义在上半复平面上的复数，但实际用起来没人关心。逆变换是
+\[f\left(t\right) = \frac{1}{2 \pi \ii} \int_{-\infty}^{+\infty} L\left(\sigma + \ii \lambda\right) \ee^{\ii \lambda t} \dd{\lambda}\]
+其实我们也根本不会用到逆变换的表达式。
+
+下面罗列出了拉普拉斯变换的性质，我们也只需要记住。
+\begin{itemize}
+    \item 线性性：$L\left[C_1 f + C_2 g\right] = C_1 L\left[f\right] + C_2 \left[g\right]$
+    \item 频移性：$L\left[f\left(t\right) \ee^{\lambda t}\right] = L\left(p - \lambda\right)$
+    \item \textcolor{red}{延迟性}\footnote{这个性质和卷积性质一起常用来求解逆变换，见下面的例子。}：$\tau > 0,\, L\left[f\left(t - \tau\right) h\left(t - \tau\right)\right] = L\left(p\right) \ee^{- p \tau}$
+    \item \textcolor{red}{微分性质}：$L\left[f^{\left(n\right)}\left(t\right)\right] = p^n L\left(p\right) - p^{n-1} f\left(0+\right) - p^{n-2} f^{\left(1\right)}\left(0+\right) - \cdots$
+    \item 积分性质：$L\left[\int_{0}^{t} f\left(s\right) \dd{s}\right] = \frac{L\left(p\right)}{p}$
+    \item \textcolor{red}{卷积性质}：$L\left[f * g\right] = L\left[f\right] \times L\left[g\right]$。这里卷积定义为
+        \[\left(f * g\right)\left(t\right) = \int_{0}^{t} f\left(s\right) g\left(t-s\right) \dd{s}\]
+        同样的，更常用的是逆变换
+        \[L^{-1}\left[F G\right] = L^{-1}\left[F\right] * L^{-1}\left[G\right]\]
+\end{itemize}
+
+要记住的还有下面常见的拉普拉斯变换：
+\color{red}
+\[L\left[\ee^{\lambda t}\right] = \frac{1}{p - \lambda},\, L\left[\frac{t^n}{n!}\right] = \frac{1}{p^{n+1}},\,L\left[\sin\left(\omega t\right)\right] = \frac{\omega}{p^2 + \omega^2},\, L\left[\cos\left(\omega t\right)\right] = \frac{p}{p^2 + \omega^2}\]
+\color{black}
+\begin{problembox}
+\begin{example}
+    解混合问题：
+    \begin{equation*}
+        \left\{
+    \begin{aligned}
+        &u_{tt} = a^2 u_{xx} + f\left(t\right),\, x>0, \,0 \leq t<+\infty\\
+        &u\left(0, x\right) = 0, u_t\left(0, x\right) = 0\\
+        &u\left(t, 0\right) = 0, u\left(t, +\infty\right)\,\text{有界}  
+    \end{aligned}
+    \right.
+    \end{equation*}
+\end{example}
+\begin{solution}
+做拉普拉斯变换。设
+\[U\left(p, x\right) = \int_{0}^{+\infty} u\left(t, x\right) \ee^{- p t} \dd{t}\]
+根据微分关系和初始条件得到
+\[p^2 U\left(p, x\right) = a^2 U_{xx}\left(p, x\right) + L\left[f\left(t\right)\right]\]
+所以先求齐次方程的通解，这一眼就瞪出来了
+\[W\left(p, x\right) = C_1\left(p\right) \ee^{\frac{px}{a}} + C_2\left(p\right) \ee^{-\frac{px}{a}}\]
+然后找一个最简单的特解。注意到$L\left[f\left(t\right)\right]$只和$p$有关，所以很容易猜出来一个特解
+\[V\left(p, x\right) = \frac{L\left[f\left(t\right)\right]}{p^2}\]
+并且，因为$u\left(t, +\infty\right)$有限，所以$U\left(p, +\infty\right)$也应该有限，这样就得到
+\[U\left(p, x\right) = \frac{L\left[f\left(t\right)\right]}{p^2} + C_2\left(p\right) \ee^{-\frac{px}{a}}\]
+令$x = 0$，得到$C_2\left(p\right) = -\frac{L\left[f\left(t\right)\right]}{p^2}$。于是
+\[U\left(p, x\right) = \frac{L\left[f\left(t\right)\right]}{p^2} - \frac{L\left[f\left(t\right)\right]}{p^2} \ee^{-\frac{p x}{a}}\]
+接下来无非是把上面那一堆东西逆变换回去。先做第一项：
+\[L^{-1}\left[\frac{L\left[f\left(t\right)\right]}{p^2}\right] = L^{-1}\left[L\left(t\right)\right] * L^{-1}\left[\frac{1}{p^2}\right] = \int_{0}^{t} f\left(t - s\right) s \dd{s}\]
+第二项和第一项相比，多乘了一个$\ee^{-p \frac{x}{a}}$。根据延迟性质得到
+\[L^{-a}\left[-\frac{L\left[f\left(t\right)\right]}{p^2} \ee^{-p \frac{x}{a}}\right] = -\left(\int_{0}^{t - \frac{x}{a}} f\left(t - \frac{x}{a} - s\right) \dd{s}\right) \times h\left(t - \frac{x}{a}\right)\]
+这两项和起来就是答案了。整理一下，最终的解为
+\begin{equation*}
+    u\left(t, x\right) = 
+    \left\{
+        \begin{aligned}
+            &\int_{0}^{t} f\left(t - s\right) s \dd{s},\, t < \frac{x}{a}\\
+            &\int_{0}^{t} f\left(t - s\right) s \dd{s} - \int_{0}^{t - \frac{x}{a}} f\left(t - \frac{x}{a} - s\right) \dd{s},\, t \geq \frac{x}{a}
+        \end{aligned}
+    \right.
+\end{equation*}
+\end{solution}
+\end{problembox}
+\begin{problembox}
+    \begin{exercise}
+        解定解问题：
+        \begin{equation*}
+            \left\{
+                \begin{aligned}
+                    &u_{tt} = a^2 u_{xx},\, 0 < x < l,\, 0 \leq t < +\infty,\\
+                    &u\left(t, 0\right) = 0,\, u_x\left(t, l\right) = A \sin\left(\omega t\right),\\
+                    &u\left(0, x\right) = 0,\, u_t\left(0, x\right) = 0.
+                \end{aligned}
+            \right.
+        \end{equation*}
+    \end{exercise}
+    \begin{exercise}
+        解定解问题：
+        \begin{equation*}
+            \left\{
+                \begin{aligned}
+                    &u_{t} = a^2 u_{xx},\, x > l,\, 0 \leq t < +\infty,\\
+                    &u\left(t, 0\right) = f\left(t\right),\, u\left(t, +\infty\right)\,\text{有界}\\
+                    &u\left(0, x\right) = 0.
+                \end{aligned}
+            \right.
+        \end{equation*}
+    \end{exercise}
+\end{problembox}
+
+\section{基本解和格林函数}
+\subsection{基本解}
+\subsection{格林函数}

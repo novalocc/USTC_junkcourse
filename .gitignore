@@ -1,0 +1,23 @@
+# LaTeX auxiliary files
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.toc
+*.lof
+*.lot
+*.lol
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+_minted*
+
+# PDF output (通常我们不把PDF传到git，因为它是编译产物)
+*.pdf
+
+# Editor/OS-specific files
+.vscode/
+.idea/
+*~
+.DS_Store
