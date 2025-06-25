@@ -5,7 +5,7 @@
 
 % --- 基类和编码 ---
 \LoadClass[a4paper, oneside]{ctexbook}
-\setCJKmainfont[Mapping = fullwidth-stop,BoldFont=STHeitiSC-Medium, ItalicFont=STKaitiSC-Regular]{STSongti-SC-Regular}
+% \setCJKmainfont[Mapping = fullwidth-stop,BoldFont=STHeitiSC-Medium, ItalicFont=STKaitiSC-Regular]{STSongti-SC-Regular}
 
 % --- 常用宏包 ---
 \RequirePackage{xparse}
@@ -27,10 +27,13 @@
                 anchorcolor=blue, 
                 citecolor=blue,
                 urlcolor=blue]{hyperref}
+\RequirePackage{dsfont}
 
 % --- 自定义颜色定义 ---
 \definecolor{myblue}{RGB}{235, 245, 255}
 \definecolor{myblueframe}{RGB}{100, 150, 255}
+\definecolor{myyellow}{RGB}{248, 216, 106}
+\definecolor{myyellowframe}{RGB}{252, 195, 7}
 \definecolor{mygreen}{RGB}{235, 255, 240}
 \definecolor{mygreenframe}{RGB}{80, 180, 120}
 \definecolor{mypurple}{RGB}{245, 240, 255}
@@ -65,6 +68,7 @@
 }
 
 
+
 % --- 定理类环境定义 ---
 
 \newcounter{theorem}[section]
@@ -87,6 +91,26 @@
     before upper={\par\vspace{1mm}}
 }
 {th}
+
+\newcounter{definition}[section]
+\newcommand{\thedefnition}{\thesection.\arabic{definition}}
+\newtcbtheorem[
+    use counter=definition
+]{definition}{定义}
+{
+    enhanced,
+    breakable,
+    colback=myyellow,
+    colframe=myyellowframe,
+    fonttitle=\bfseries\large,
+    boxrule=1pt,
+    arc=3mm,
+    auto outer arc,
+    toptitle=1mm,
+    bottomtitle=1mm,
+    before upper={\par\vspace{1mm}}
+}
+{def}
 
 
 

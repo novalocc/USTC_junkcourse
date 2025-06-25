@@ -95,7 +95,7 @@
 \newcounter{definition}[section]
 \newcommand{\thedefnition}{\thesection.\arabic{definition}}
 \newtcbtheorem[
-    use counter=theorem
+    use counter=definition
 ]{definition}{定义}
 {
     enhanced,
