@@ -92,10 +92,10 @@
 }
 {th}
 
-\newcounter{definition}[section]
-\newcommand{\thedefnition}{\thesection.\arabic{definition}}
+\newcounter{defcounter}[section]
+\renewcommand{\thedefcounter}{\thesection.\arabic{defcounter}}
 \newtcbtheorem[
-    use counter=definition
+    use counter=defcounter
 ]{definition}{定义}
 {
     enhanced,

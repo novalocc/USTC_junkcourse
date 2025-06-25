@@ -7,7 +7,7 @@
 
 \section{微分中值定理}
 常见的三个微分中值定理：
-\begin{theorem}{微分中值定理}
+\begin{theorem}{微分中值定理}{thm:0.1}
 设 $f(x)$ 在区间 $[a,b]$ 上满足相应条件，则：
 \begin{enumerate}
     \item \textbf{罗尔定理}：若 $f(x) \in C^1[a,b]$，且 $f(a) = f(b)$，则存在 $\xi \in (a,b)$，使得
@@ -48,7 +48,7 @@
 
 \section{误差}
 在计算机计算中我们得到的数往往是一个近似的结果，因此为了衡量结果的准确性我们需要定义数据的误差。
-\begin{definition}{误差}
+\begin{definition}{误差}{def:0.1}
     对于待求数据的精确值 $x^\star$ 和计算出的数据的值 $x$，我们定义{\bf （绝对）误差}|：
     \[
         e = x^\star - x.
@@ -57,7 +57,7 @@
 \end{definition}
 
 \section{范数}
-\begin{definition}{范数}
+\begin{definition}{范数}{def:0.2}
     在实数域 $\mathbb{R}$ 上的线性空间 $V$ 中，我们定义映射 $\| \cdot \| :V\to \mathbb{R}$，满足：
     \begin{enumerate}
         \item 非负性：$\|\alpha\| \geqslant 0,\; \alpha \in V$，当且仅当 $\alpha =0$ 时等号成立；
@@ -76,7 +76,7 @@
 \end{enumerate}
 
 \section{谱半径}
-\begin{definition}{谱半径}
+\begin{definition}{谱半径}{def:0.3}
     矩阵 $\mathbf{A}$ 的{\bf 谱半径}定义为：
     \[
         \rho(\mathbf{A}) = \max\{|\lambda_i|\}.

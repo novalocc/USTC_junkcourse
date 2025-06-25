@@ -93,7 +93,7 @@
 {th}
 
 \newcounter{definition}[section]
-\newcommand{\thedefnition}{\thesection.\arabic{definition}}
+\renewcommand{\thedefinition}{\thesection.\arabic{definition}}
 \newtcbtheorem[
     use counter=definition
 ]{definition}{定义}

@@ -73,7 +73,6 @@
 
 \newcounter{theorem}[section]
 \renewcommand{\thetheorem}{\thesection.\arabic{theorem}}
-
 \newtcbtheorem[
     use counter=theorem
 ]{theorem}{定理}
@@ -92,10 +91,10 @@
 }
 {th}
 
-\newcounter{definition}[section]
-\newcommand{\thedefnition}{\thesection.\arabic{definition}}
+\newcounter{defcounter}[section]
+\newcommand{\thedefcounter}{\thesection.\arabic{defcounter}}
 \newtcbtheorem[
-    use counter=definition
+    use counter=defcounter
 ]{definition}{定义}
 {
     enhanced,
