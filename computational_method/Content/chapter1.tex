@@ -1,100 +1,26 @@
-\chapter*{绪论与数学准备}
-\addcontentsline{toc}{chapter}{绪论与数学准备}
+\chapter{插值}
+插值法往往是用一组多项式来表示一个满足特定条件的函数 $f(x)$，其中特殊条件往往是函数 $f(x)$ 或其导数在某点的值. 另外，{\color{red} 本指南的求和部分默认为 $0$ 到 $n-1$ 共 $n$ 个数。}
 
-正如前言所说计算方法作为一门{\bf 数学课}，主要讲述了计算机进行数学计算的方法——由于计算机只能处理离散的数字信号，因此对于微积分、函数拟合等操作，我们必须将其转化为计算机能够进行的数学操作（主基本的四则运算）来完成。同时还要考虑算法的普适性、收敛性、稳定性和时间复杂度等一系列问题。
-
-在开始介绍各种算法之前，我们先来回顾一些在微积分与线性代数\footnote{广义上的，实际上很多概念并不会在“线性代数”这门课程中出现.}的定义与定理。值得一提的是，尽管这是一门数学课，但我们在一些表述上并不会追求十分的严谨，例如我们似乎总是默认矩阵的维数是“恰当”的（方阵或与所作用的向量相匹配），本讲义中将不过多赘述。
-
-\section{微分中值定理}
-常见的三个微分中值定理：
-\begin{theorem}{微分中值定理}
-设 $f(x)$ 在区间 $[a,b]$ 上满足相应条件，则：
-\begin{enumerate}
-    \item \textbf{罗尔定理}：若 $f(x) \in C^1[a,b]$，且 $f(a) = f(b)$，则存在 $\xi \in (a,b)$，使得
-    \[
-        f'(\xi) = 0.
-    \]
-
-    \item \textbf{拉格朗日中值定理}：若 $f(x) \in C^1[a,b]$，则存在 $\xi \in (a,b)$，使得
-    \[
-        f'(\xi) = \frac{f(b) - f(a)}{b - a}.
-    \]
-
-    \item \textbf{泰勒定理}：若 $f \in C^{n+1}[a,x]$，则有
-    \[
-        f(x) = \sum_{k=0}^{n} \frac{f^{(k)}(a)}{k!}(x - a)^k + R_n(x),
-    \]
-    其中余项 $R_n(x)$ 有两种形式：
-
-    \begin{itemize}
-        \item 拉格朗日余项：
-        \[
-            R_n(x) = \frac{f^{(n+1)}(\xi)}{(n+1)!}(x - a)^{n+1}, \quad \xi \in (a,x)
-        \]
-        
-        \item 积分余项：
-        \[
-            R_n(x) = \frac{1}{n!} \int_a^x (x - t)^n f^{(n+1)}(t) \, dt
-        \]
-    \end{itemize}
-
-    若 $|f^{(n+1)}(t)| \leqslant M$，则误差估计为：
-    \[
-        |R_n(x)| \leqslant \frac{M}{(n+1)!} |x - a|^{n+1}.
-    \]
-\end{enumerate}
-\end{theorem}
-
-
-\section{误差}
-在计算机计算中我们得到的数往往是一个近似的结果，因此为了衡量结果的准确性我们需要定义数据的误差。
-\begin{definition}{误差}
-    对于待求数据的精确值 $x^\star$ 和计算出的数据的值 $x$，我们定义{\bf （绝对）误差}|：
-    \[
-        e = x^\star - x.
-    \]
-    若要求 $|e|<\varepsilon$，我们称 $\varepsilon$ 为{\bf 误差限}；同时定义更为朴实的相对误差 $\delta = \dfrac{e}{x^\star}$.
-\end{definition}
-
-\section{范数}
-\begin{definition}{范数}
-    在实数域 $\mathbb{R}$ 上的线性空间 $V$ 中，我们定义映射 $\| \cdot \| :V\to \mathbb{R}$，满足：
-    \begin{enumerate}
-        \item 非负性：$\|\alpha\| \geqslant 0,\; \alpha \in V$，当且仅当 $\alpha =0$ 时等号成立；
-        \item 齐次性：$\|\lambda \alpha\| =|\lambda|\|\alpha \|,\; \lambda \in \mathbb{R},\, \alpha \in V$；
-        \item 三角不等式：$\|\alpha+\beta\|\leqslant \|\alpha\|+\|\beta\|,\; \alpha,\beta \in V$.
-    \end{enumerate}
-\end{definition}
-
-常见的范数有：
-\begin{enumerate}
-    \item （向量）$p$-范数：$\|\alpha\|_p = \left(\sum_{i=1}^n |\alpha_i|^p\right)^{\frac{1}{p}},\; p\geqslant 1$；
-    \item （矩阵）$p$-范数：$\|\mathbf{A}\|_p = \max\dfrac{\|\mathbf{A}\alpha\|_p}{\|\alpha\|_p},\; p\geqslant 1$，我们往往将 $\alpha$ 限制在单位球面上.
-    \item 特殊的 $p$-范数：$\|\alpha\|_{\infty} = \max |\alpha_i|$ 称为向量范数，$\|\mathbf{A}\|_1 $ 为列和范数，$\|\mathbf{A}\|_\infty$ 为行和范数；
-    \item Frobenius 范数：$\|\mathbf{A}\|_F = \sqrt{\tr(\mathbf{A}^\top\mathbf{A})} = \sqrt{\left|\sum_{i,j} a_{ij}\right|^2}$；
-    \item 条件数：$\cond_p (\mathbf{A} ) = \|\mathbf{A}\|_p \|\mathbf{A}^{-1}\|_p$，$\cond_p (\mathbf{A}) \geqslant \|\mathds{1}\|_p= 1$，因此条件数约大稳定性越差.
-\end{enumerate}
-
-\section{谱半径}
-\begin{definition}{谱半径}
-    矩阵 $\mathbf{A}$ 的{\bf 谱半径}定义为：
-    \[
-        \rho(\mathbf{A}) = \max\{|\lambda_i|\}.
-    \]
-    其中 $\lambda_i$ 是 $\mathbf{A}$ 的第 $i$ 个本征值\footnote{eigenvalue，也称特征值，对于 eigen- 前缀，本讲义统称本征.}.
-\end{definition}
-对于任意矩阵 $\mathbf{A}$ ，我们有：
+\section{Lagrange 插值}
+我们考虑一组多项式作为函数 $f(x)$ 的基：
 \[
-    \rho(\mathbf{A}) \leqslant \|\mathbf{A}\|_p,\quad \forall p.
+    l_i(x) = \dfrac{\prod_{k\neq i}(x-x_k)}{\prod_{k\neq i}(x_i-x_k)}.
 \]
-且有恒等式：
+若我们知道函数 $f(x)$ 的 $n$ 个点 $f(x_m)$ 的函数值 $f(x_m)$，我们可以得到一个拟合多项式：
 \[
-    \|  \mathbf{A}\|_2 = \sqrt{\rho(\mathbf{A}^\top\mathbf{A})}.
+    L_n(x) = \sum_{m} l_i(x_m)f(x_m).
 \]
+我们称 $L_n(x)$ 为 {\bf Lagrange 多项式}. 考虑 $l_i$ 的性质 $l_i(x_j) = \delta_{ij}$，显然有 $L_n(x_m) = f(x_m)$.
 
-同时我们可以定义{\bf 矩阵的收敛性}，即一下三个命题相互等价：
-\begin{enumerate}
-    \item 矩阵 $\mathbf{A}$ 收敛；
-    \item $\lim_{k\to \infty} \mathbf{A}^k = 0$；
-    \item $\rho(\mathbf{A})<1$.
-\end{enumerate}
+对于一个插值多项式，我们更关注多项式的误差. 可以证明，Lagrange 多项式的误差为：
+\[
+    R_n(x) = \dfrac{f^{(n+1)}(\xi)}{(n+1)!}\prod_i( x-x_i),\quad \xi \in [a,b].
+\]
+\begin{problembox}
+    \begin{example}
+        试证明 Lagrange 多项式的误差可以写为上述的 $R_n(x)$.
+    \end{example}
+\end{problembox}
+
+\section{Newton 插值}
+
