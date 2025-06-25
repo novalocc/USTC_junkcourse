@@ -5,7 +5,7 @@
 
 % --- 基类和编码 ---
 \LoadClass[a4paper, oneside]{ctexbook}
-% \setCJKmainfont[Mapping = fullwidth-stop,BoldFont=STHeitiSC-Medium, ItalicFont=STKaitiSC-Regular]{STSongti-SC-Regular}
+\setCJKmainfont[Mapping = fullwidth-stop,BoldFont=SourceHanSerifSC-Bold, ItalicFont=方正楷体简体]{SourceHanSerifSC-Regular}
 
 % --- 常用宏包 ---
 \RequirePackage{xparse}
@@ -73,7 +73,6 @@
 
 \newcounter{theorem}[section]
 \renewcommand{\thetheorem}{\thesection.\arabic{theorem}}
-
 \newtcbtheorem[
     use counter=theorem
 ]{theorem}{定理}
@@ -92,10 +91,10 @@
 }
 {th}
 
-\newcounter{definition}[section]
-\renewcommand{\thedefinition}{\thesection.\arabic{definition}}
+\newcounter{defcounter}[section]
+\renewcommand{\thedefcounter}{\thesection.\arabic{defcounter}}
 \newtcbtheorem[
-    use counter=definition
+    use counter=defcounter
 ]{definition}{定义}
 {
     enhanced,
