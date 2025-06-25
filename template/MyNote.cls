@@ -5,6 +5,7 @@
 
 % --- 基类和编码 ---
 \LoadClass[a4paper, oneside]{ctexbook}
+\setCJKmainfont[Mapping = fullwidth-stop,BoldFont=STHeitiSC-Medium, ItalicFont=STKaitiSC-Regular]{STSongti-SC-Regular}
 
 % --- 常用宏包 ---
 \RequirePackage{xparse}
