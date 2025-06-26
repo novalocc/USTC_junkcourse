@@ -75,6 +75,24 @@
     \item 条件数：$\cond_p (\mathbf{A} ) = \|\mathbf{A}\|_p \|\mathbf{A}^{-1}\|_p$，$\cond_p (\mathbf{A}) \geqslant \|\mathds{1}\|_p= 1$，因此条件数约大稳定性越差.
 \end{enumerate}
 
+\begin{problembox}
+    \begin{example}
+        设 $\mathbf{A} = \begin{pmatrix}
+            1 & 1 & 0 \\ 1 & 2 & 1 \\ 0 & 2 & 2
+        \end{pmatrix}$，求 $\|\mathbf{A}\|_1$ 和 $\|\mathbf{A}\|_\infty$.
+    \end{example}
+    \begin{solution}
+        所谓 $1$-范数（列和范数）就是对每一列各个数字的绝对值求和，并取最大值：
+        \[
+            \|\vec{A}\|_1 = \max(1+1+0,1+2+2,0+1+2) = 5.
+        \]
+        同理无穷范数（行和范数）就是对每一行各个数字的绝对值求和，并取最大值：
+        \[
+            \|\vec{A}\|_\infty = \max(1+1+0,1+2+1,0+2+2) = 4.
+        \]
+    \end{solution}
+\end{problembox}
+
 \section{谱半径}
 \begin{definition}{谱半径}{def:0.3}
     矩阵 $\mathbf{A}$ 的{\bf 谱半径}定义为：

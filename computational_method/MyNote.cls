@@ -28,11 +28,12 @@
                 citecolor=blue,
                 urlcolor=blue]{hyperref}
 \RequirePackage{dsfont}
+\RequirePackage{mathrsfs}
 
 % --- 自定义颜色定义 ---
 \definecolor{myblue}{RGB}{235, 245, 255}
 \definecolor{myblueframe}{RGB}{100, 150, 255}
-\definecolor{myyellow}{RGB}{248, 216, 106}
+\definecolor{myyellow}{RGB}{249, 236, 195}
 \definecolor{myyellowframe}{RGB}{252, 195, 7}
 \definecolor{mygreen}{RGB}{235, 255, 240}
 \definecolor{mygreenframe}{RGB}{80, 180, 120}

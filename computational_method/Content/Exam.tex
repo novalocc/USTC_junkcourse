@@ -1,0 +1,369 @@
+\chapter*{面向真题的速通}
+\addcontentsline{toc}{chapter}{面向真题的速通}
+{\kaishu \color{blue} 在笔者尝试面向笔记速通之后看了一眼真题立刻认识到了事情的不对，于是在距离考试还有八个小时之际，整理了这样一份《面向真题的速通》章节，通过对十年真题高频考点的拟合，罗列了知识点和典型例题.}
+
+\section*{填空题}
+\subsection*{数学准备}
+一定要会求几种特殊的矩阵范数，这里设待求矩阵 $\vec{A} = (a_{ij})$ ：
+\begin{itemize}
+    \item $1$- 范数：也称列和范数，即每列元素的绝对值的和的最大值. {\color{red} （所有元素求绝对值 $\to$ 每列元素求和 $\to$ 找出求和后的最大值）} $\|\vec{A}\|_1 =\max_j \left(\sum_i |a_{ij}|\right)$；
+    \item $\infty $- 范数：也称行和范数，即每行元素的绝对值的和的最大值. {\color{red}（所有元素求绝对值 $\to$ 每行元素求和 $\to$ 找出求和后的最大值）} $\|\vec{A}\|_1 =\max_i \left(\sum_j |a_{ij}|\right)$；
+    \item 条件范数：$\cond_p = \|A\|_p \|A^{-1}\|_p$，往往也是 $p$ 取 $1$ 或 $\infty$，会求上面两个就会求条件范数（记住定义）；
+    \item 谱半径：$\rho(\vec{A}) = \max_i |\lambda_i|$，即矩阵特征值的绝对值的最大值{\color{red} （求出矩阵所有特征值 $\lambda_i$ $\to$ 取绝对值 $\to$ 找出最大值）}.
+\end{itemize}
+\begin{problembox}
+    \begin{example}
+        (2021 Spring) 设 $\mathbf{A} = \begin{pmatrix}
+            3 & 2 \\ -1 & 7
+        \end{pmatrix}$，求 $\|\mathbf{A}\|_1,\, \|\mathbf{A}\|_\infty,\, \cond_1 (\vec{A}),\, \rho(\vec{A})$.
+    \end{example}
+    \begin{solution}
+        
+    \end{solution}
+\end{problembox}
+
+\subsection*{矩阵分解}
+矩阵的分解默认有两种形式：$\vec{LU}$ 分解和 $\vec{QR}$ 分解，我们分别讲解：
+\begin{itemize}
+    \item $\vec{LU}$ 分解：也称为 Dolittle 分解，$\vec{L}$ 为单位下三角矩阵，$\vec{U}$ 为上三角矩阵. 可以通过 Gauss 消元法\footnote{线性代数第一章} 得到，其中 $\vec{L}$ 记录了消元过程的初等线性变换信息，$\vec{U}$ 是消元后的结果.
+    \item $\vec{QR}$ 分解：$\vec{Q}$ 为正交矩阵，$\vec{R}$ 为上三角矩阵. 一个稳定、常用的方法是利用 Householder 矩阵进行消元：Householder 矩阵 $\vec{H} = \mathds{1} - 2\vec{v}\vec{v}^\top$ 是一个对称且正交的矩阵，如果取 
+    \[
+        \vec{v} = \mathrm{norm}(\vec{x} + \mathrm{sign}(x_1)\|\vec{x}\|\vec{e}).
+    \]
+    \footnote{$\mathrm{norm}$ 是对 $\vec{v}$ 归一化 $\vec{v} = \dfrac{\vec{v}}{\|\vec{v}\|}$.} 其中 $\vec{x}$ 为矩阵 $\vec{A}$ 的第一列，则 $\vec{H} \vec{A}$ 可将 $\vec{A}$ 的第一列除第一个元素外均变为 $0$.
+
+    例如{\color{red} 设 $\vec{A} = (\vec{a}_1,\vec{a}_2,\dots,\vec{a}_n)$，其中 $a_{11}>0$，则令：
+    \[
+        \vec{v} = \vec{a}_1 + |\vec{a}_1|\vec{e} = \begin{pmatrix}
+            a_{11}+|\vec{a}_1|\\a_{12}\\\ldots \\ a_{1n}
+        \end{pmatrix}.
+    \]
+    然后归一化 $\vec{v}$，令 $\vec{H} = \mathds{1} - 2\vec{v}\vec{v}^\top$，我们有：
+    \[
+        \vec{H}\vec{A} = \begin{pmatrix}
+            r_{11} & \vec{r} \\ 0 & \vec{A}'
+        \end{pmatrix}.
+    \]
+    对 $\vec{A}'$ 重复上述操作即可得到 $\vec{R} = \vec{H}_1\vec{H}_2 \dots\vec{H}_n \vec{A}$，$\vec{Q}^\top = \vec{H}_1\vec{H}_2 \dots\vec{H}_n $.}
+\end{itemize}
+\begin{problembox}
+    \begin{example}
+        (2023 Fall) 设 $\mathbf{A} = \dfrac{1}{25}\begin{pmatrix}
+            7 & 7 & 24 \\ 0 & 50 & -25 \\ 24 & 24 & 7
+        \end{pmatrix}$.
+        \begin{enumerate}
+            \item 求 $\vec{A}$ 的 Dolittle 分解；
+            \item 利用 Householder 分解，求 $\vec{A}$ 的正交分解.
+        \end{enumerate}
+    \end{example}
+    \begin{solution}
+        
+    \end{solution}
+\end{problembox}
+
+\subsection*{矩阵本征值求解}
+矩阵特征值求解在考试中往往以（规范的）幂法为主要考察方法，在 2020 年以前多有考察，但因在近些年并没有出现，这里仅提一下基本思想：
+
+幂法本质是利用 $\vec{A}$ 的本征矢量可以张成一个线性空间来求解，我们任取向量 $\vec{x}$ 满足：
+\[
+    \vec{x}^{(0)} = \sum_i a_i \vec{v}_i,\quad a_1\neq 0.
+\]
+其中 $\vec{v}_i$ 为 $\vec{A}$ 的本征矢量，对应的本征值的绝对值由大到小排列. 则我们迭代 $\vec{x}^{(k+1)} = \vec{A}\vec{x}^{(k)}$ 得到：
+\[
+    \vec{x}^{(k)}= \sum_i a_i(\lambda_i)^k \vec{v}_i.
+\]
+实际上我们往往采用规范的幂法，即对 $\vec{x} ^{(k+1)}$ 在迭代后归一化，我们记为 $\vec{y}^{(k)}$. 考试中{\color{red} 我们重点关注序列的行为与 $\vec{A}$ 本征值的关系：
+\begin{itemize}
+    \item $\lambda_1$ 唯一且为正：$\{\vec{y}^{(k)}\}$ 收敛，$\lambda_1 = \|\vec{x}^{(k)}\|_\infty$，$\vec{v}_1 = \vec{y}^{(k)}$；
+    \item $\lambda_1$ 唯一且为负：$\{\vec{y}^{(2k)}\},\, \{\vec{y}^{(2k+1)}\}$ 分别收敛到互为 $\vec{v}_1,-\vec{v_1}$，$\lambda_1 = - \| \vec{x}^{(k)}\|_\infty$.
+    \item $\lambda_1$ 不唯一：$\{\vec{y}^{(2k)}\},\, \{\vec{y}^{(2k+1)}\}$ 分别收敛到两个向量.
+\end{itemize}}
+\begin{problembox}
+    \begin{example}
+        (2020 Spring) 假设对 $n$ 阶矩阵 $A$ 使用规范幂法
+    \[
+    \begin{cases}
+        Y^{(k)} = \dfrac{X^{(k)}}{ \| X^{(k)} \|_\infty}, \\ 
+        X^{(k+1)} = AY^{(k)}.
+    \end{cases}
+    \]
+    得到序列 $\{X^{(n)}\}$。若 $\{X^{(2k)}\}$ 和 $\{X^{(2k+1)}\}$ 分别收敛于互为反号的向量，则 $A$ 按模最大特征值有$\underline{\quad \quad \quad }$ 个，其近似值为$\underline{\quad \quad \quad }$，与其对应的特征向量为$\underline{\quad \quad \quad }$。
+    \end{example}
+    \begin{solution}
+        
+    \end{solution}
+\end{problembox}
+
+
+
+
+\section*{解答题}
+
+\subsection*{插值法与差商}
+Lagrange 插值较为基础，近些年也未多涉及，因此这里着重展示 Hermite 差商（Newton 差商）。首先一定要熟知差商的定义：
+\begin{definition}{差商}{}
+    定义 $2$ 阶差商和 $k$ 阶差商为：
+    \[
+        f[x_1,x_2] = \dfrac{f(x_1)-f(x_2)}{x_1-x_2},\quad f[x_0,\dots,x_k] = \dfrac{f[x_0,\dots,x_{k-1}]-f[x_1,\dots,x_{k}]}{x_0-x_k}.
+    \]
+\end{definition}
+
+对于已知 $(x_i,f(x_i))$ 的问题，我们写出 Newton 插值表
+\[
+\begin{array}{c|c|c|c|c}
+i & x_i & f[x_i] & f[x_i,x_{i+1}] & f[x_i,x_{i+1},x_{i+2}] \\
+\hline
+0 & x_0 & f(x_0) & \dfrac{f(x_1) - f(x_0)}{x_1 - x_0} & \dfrac{f[x_1,x_2] - f[x_0,x_1]}{x_2 - x_0}  \\
+1 & x_1 & f(x_1) & \dfrac{f(x_2) - f(x_1)}{x_2 - x_1}  & \\
+2 & x_2 & f(x_2) &   & \\
+\end{array}
+\]
+
+对于已知 $(x_i,f(x_i),f'(x_i))$ 的问题，我们写出 Hermite 插值表，这里以 $(1,2,0)$ 和 $(2,3,1)$ 为例：
+\[
+\begin{array}{c|c|c|c|c|c}
+i & z_i & f[z_i] & f[z_i,z_{i+1}] & f[z_i,z_{i+1},z_{i+2}] & f[z_i,z_{i+1},z_{i+2},z_{i+3}] \\
+\hline
+0 & 1 & f(1) = 2 & f'(1) = 0 & 1 & -1 \\
+1 & 1 & f(1) = 2 & \dfrac{3 - 2}{2 - 1} = 1 & 0 & \\
+2 & 2 & f(2) = 3 & f'(2) = 1 &   &  \\
+3 & 2 & f(2) = 3 &           &   & 
+\end{array}
+\]
+Hermite 插值表与 Newton 插值表唯一的区别在于需要把 $x_i$ 重复两次，并定义 $f[x_i,x_i] = f'(x_i)$.
+
+最后的{\color{red} 插值多项式公式统一写为：
+\[
+    p(x) = f[z_0] + f[z_0,x_1](x-z_0)+f[z_0,z_1,z_2](x-z_0)(x-z_1) +\dots .
+\]
+（Newton 法中 $z$ 换成 $x$）.}
+
+\begin{problembox}
+    \begin{example}
+        (2023 Spring) 
+    通过 Newton 插值方法，构造如下数据的 Hermite 插值多项式 $f(x)$。
+    
+    \begin{center}
+    \begin{tabular}{c|ccc}
+        $x_i$ & 1 & 2 & 3 \\ \hline
+        $f(x_i)$ & 1 & 1 & 0 \\
+        $f'(x_i)$ & 0 & & 1 \\
+    \end{tabular}
+    \end{center}
+
+    \end{example}
+    \begin{solution}
+        
+    \end{solution}
+\end{problembox}
+
+\subsection*{函数逼近}
+近几年都没有考最小二乘拟合，可能是觉得过于简单了，有关最小二乘拟合的问题在这里就不过多赘述，这里跳过函数逼近的许多数学理论，重点讲两个函数逼近问题的结论，如果我们要对 $f(x)$ 做函数逼近，我们往往会遇到两种问题：
+\begin{itemize}
+    \item 求最佳一致逼近多项式 $p_1(x)$：即求 $p_1(x)$，使得 $\|f(x) - \rho(x)\|_\infty = \max_x|f(x)-p(x)|$ 最小；
+    \item 给定“权函数” $\rho(x)$，求最佳平方逼近多项式 $p_2(x)$：即求 $p_2(x)$，使得 $\left<f,p\right>_\rho = \int_a^b \rho(x)(f(x)-p(x))^2\dd x$ 最小.
+\end{itemize}
+其中 $p(x)$ 往往是给确定的次数，例如“二次最佳一致逼近多项式”就是令 $p_1(x) = ax^2+bx+c$，其中 $a,b,c$ 为待定系数，有时也直接给出 $p(x)$ 的形式，求最佳逼近多项式。
+
+总的来说这道题的解题思路为：{\color{red} 翻译题目条件（最佳**逼近多项式）$\to$ 求解待定系数.}
+
+\begin{problembox}
+    \begin{example}
+        (2023 Fall) 给定区间 $[-1,1]$ 上的函数 $f(x)= |x|$.
+        \begin{enumerate}
+            \item 求 $f(x)$ 在权函数 $\rho(x) = x^2$ 下的二次最佳平方逼近多项式；
+            \item 求 $f(x)$ 的一次最佳一致逼近多项式.
+        \end{enumerate}
+    \end{example}
+    \begin{solution}
+        
+    \end{solution}
+\end{problembox}
+
+\subsection*{数值微分与数值积分}
+整个数值微分与数值积分在考试中就是对泰勒展开的应用，且按经验来说不会超过四阶，所以要熟读并背诵泰勒展开前五项：
+\[
+    f(x+h) = f(x)+hf'(x)+\dfrac{h^2}{2}f''(x)+\dfrac{h^3}{6}f'''(x)+\dfrac{h^4}{24}f''''(x)+O(h^5).
+\]
+当然还有一种方法就是利用微分中值定理求解误差，在课后习题中出现过，这里不过多赘述. 此外，数值积分只需要{\color{red} 背诵一个定义}：
+\begin{definition}{代数精度}{}
+    记函数 $f$ 的数值积分和积分的精确解分别为 $I_n(f)$ 和 $I(f)$，若数值解分满足：
+    \[
+        I_n(x^i) = I(x^i),\quad i = 0,1,2,\dots k,\qquad I_n(x^{k+1})\neq I(x^{k+1}).
+    \]
+    则称数值积分 $I_n$ 具有 $k$ 阶代数精度。
+\end{definition}
+其实就是{\color{red} 把 $x^k$ 扔进数值积分公式，计算最后结果与精确解是否有误差}，一般考试内容也会限制 $k=0,1,2,3$ 左右.
+
+\begin{problembox}
+    \begin{example}
+    (2024 Fall) \begin{enumerate}
+        \item $\forall f\in C^4[a,b]$，证明：
+        \[
+            \int_a^b f(x) \dd x = \dfrac{b-a}{2}[f(a)+f(b)]+\dfrac{(b-a)^2}{12}[f'(a)-f'(b)]+\dfrac{f^{(4)}(\xi)}{720}(b-a)^5,\quad \xi \in [a,b].
+        \]
+        \item 设 $f(x)$ 充分光滑，且有如下数值解分公式：
+        \[
+            \int_{-1}^{1} f(x)x^4\dd x = c_1f(x_1)+c_2f(x_2).
+        \]
+        试确定积分节点 $x_1,x_2$ 与对应系数 $c_1,c_2$ 使其达到最高代数精度.
+    \end{enumerate}
+    \end{example}
+    \begin{solution}
+        
+    \end{solution}
+\end{problembox}
+
+\subsection*{常微分方程数值解}
+常微分方程同样是泰勒展开的应用，我们{\color{red} 分别对精确解和数值解做展开：
+\[
+    y(x_n+h) = y_n + hy'(x_n) +\dots.
+\]
+\[
+    y_{n+1} = y_n + \dots.
+\]
+如果题目要求数值解公式的参数，则比较系数；如果是求局部收敛阶，则作差得到 $O(h^k)$. }
+
+另外一个常考虑的问题是数值方法的稳定性，此时我们令微分方程为：
+\[
+    y' = \lambda y.
+\]
+则可将数值解写为：
+\[
+    y_{n+1} = R(h\lambda)y.
+\]
+绝对稳定区域定义为：
+\[
+    \mathscr{S} = \{z\in \mathbb{C}\big| |R(z)|<1\}.
+\]
+若稳定区域包含左半平面，则称为 A-稳定；若 A-稳定且 $\lim_{z\to -\infty} R(z) = 0$，则称为 L-稳定.
+\begin{problembox}
+    \begin{example}
+    (2024 Fall) 给定常微分方程的初值问题
+    \[
+    \begin{cases}
+        y'(x) = f(x, y), & x \in [0, T], \\
+        y(0) = y_0,
+    \end{cases}
+    \]
+    并有如下数值方法
+    \[
+    \begin{cases}
+        k_1 = f(x_n, y_n), \\
+        k_2 = f(x_n + \alpha h, y_n + \alpha k_1), \\
+        y_{n+1} = y_n + Ahk_1 + Bhk_2,
+    \end{cases}
+    \]
+    其中 $\alpha \in (0, 1]$, $f(x, y)$ 足够光滑, $h$ 为步长。
+
+\begin{enumerate}
+    \item 对给定 $\alpha$ 试确定 $A$ 与 $B$ 使数值格式达到最高阶的精度，并推导出局部截断误差公式；
+    
+    \item 对 (1) 中的数值格式，在复平面求其绝对稳定区域，并判定是否是 A-稳定的。
+\end{enumerate}
+    \end{example}
+    \begin{solution}
+        
+    \end{solution}
+\end{problembox}
+
+
+
+\subsection*{线性方程求解}
+线性方程求解即求解形如：
+\[
+    \vec{A}\vec{x} = \vec{b}.
+\]
+形式的方程组，一种方法是通过 $LU$ 分解直接求解，也就是线性代数中常用的 Gauss 消元，另一种是计算机常用的迭代求解，这是考试的重点. 我们首先将 $\vec{A}$ 分解：
+\[
+    \vec{A} = \vec{L}+\vec{D}+\vec{U}.
+\]
+其中 $\vec{L},\vec{D},\vec{U}$ 分别为矩阵 $\vec{A}$ 的下三角、对角、上三角部分，即 $\vec{L} = (a_{ij})_{i<j},\,\vec{D} = (a_{ii}),\,\vec{U} = (a_{ij})_{i>j}$，其余元素均为 $0$. 而{\color{red} 迭代就是将 $\vec{A}$ 分解后的不同部分作用在 $\vec{x}^{(k+1)}$ 和 $\vec{x}^{(k)}$ 上}. 下面介绍三种迭代：
+\begin{itemize}
+    \item Jacobi 迭代：$\vec{D}\vec{x}^{(k+1)}+(\vec{L}+\vec{U})\vec{x}^{(k)} = \vec{b}$；
+    \item Gauss-Seidel 迭代：$(\vec{D}+\vec{L})\vec{x}^{(k+1)}+\vec{U}\vec{x}^{(k)} = \vec{b}$；
+    \item 松弛迭代 (SOR 迭代)：利用 Gauss-Seidel 迭代得到 $\vec{x}^{(k+1)}_{\rm GS} $，然后加权 $\omega$ 得到 $\vec{x}^{(k+1)}_{\rm SOR} = (1-\omega)\vec{x}^{(k)}+\omega \vec{x}^{(k+1)}_{\rm GS}$. 其中 $\omega \in(0,2)$ 被称为松弛因子，$\omega = 1$ 时退化为一般的 GS 迭代.
+\end{itemize}
+实际上我们也应该熟悉利用分量 $a_{ij},x_i,b_i$ 写出迭代公式，这里不多做展开.
+
+另外常考的是 $\vec{A}$ 中含有参数，要求迭代收敛，求参数取值范围，此时最重要的一点就是知道收敛条件，我们有如下定理：
+\begin{theorem}{迭代收敛准则}
+    假设迭代可以写为 $\vec{x}^{(k+1)} = \vec{G}\vec{x}^{(k)}+\vec{c}$ 的形式，则迭代收敛的一个必要条件是 $\rho(\vec{G}) <1$.
+\end{theorem}
+例如题目中经常让我们求 Gauss-Seidel 迭代法收敛条件，我们只需求：
+\[
+    \rho(-(\vec{D}+\vec{L})^{-1}\vec{U}) <1.
+\]
+即可，谱半径的求解见填空题第一部分.
+\begin{problembox}
+    \begin{example}
+    (2023 Fall) 设有线性方程组 $\vec{A}\vec{x} = \vec{b}$，其中 $\vec{A} = \begin{pmatrix}
+        2 & -1 & 0 \\ -1 & -2 & c \\ 0 & c & 3
+    \end{pmatrix}$，$\vec{b} = \begin{pmatrix}
+        6 \\ 6 \\ 6
+    \end{pmatrix}$，$c\in \mathbb{R}$.
+    \begin{enumerate}
+        \item 分别写出相应的 Jacobi 迭代，Gauss-Seidel 迭代，和以 $\omega \in (0,2)$ 为松弛因子的松弛迭代 (SOR) 的迭代格式（分量形式）；
+        \item 求参数 $c$ 的取值范围使得 Gauss-Seidel 迭代收敛.
+    \end{enumerate}
+    \end{example}
+    \begin{solution}
+        
+    \end{solution}
+\end{problembox}
+
+
+\subsection*{非线性方程求解}
+非线性方程我们重点关注收敛阶的定义：
+\begin{definition}{收敛阶}{}
+    记第 $k$ 次迭代产生的误差为 $e = |x_k -x^\star|$，其中 $x^\star$ 为非线性方程的精确解，则我们定义若：
+    \[
+        \lim_{k\to \infty} \dfrac{e_{k+1}}{e^p_k} = C.
+    \]
+    我们称迭代具有 $p$ 阶收敛阶.
+\end{definition}
+
+收敛阶的定义实际上也来自于泰勒公式的展开，我们在精确解 $x^\star$ 附近展开迭代格式 $\varphi(x)$ ，若有：
+\[
+    \varphi(x) = x^\star + \dfrac{(x-x^\star)^p}{p}\varphi^{(p)}(x) +\dots.
+\]
+则 $x= \varphi(x)$ 迭代具有 $p$ 阶收敛阶. {\color{red} 实际求收敛阶或求系数使得收敛阶最小时，直接对精确解做泰勒展开，比较系数，度取结果.}
+
+\begin{problembox}
+    \begin{example}
+        (2024 Fall)     我们可以通过求解方程 $x^3 - a = 0$ ($a > 0$) 来计算 $\sqrt[3]{a}$。试确定常数 $p, q, r$ 使得迭代法
+    \[
+    x_{k+1} = px_k + q\frac{a}{x_k^2} + r\frac{a^2}{x_k^5}
+    \]
+    产生的序列 $\{x_k\}$ 收敛到 $\sqrt[3]{a}$，并使其收敛阶尽可能高。
+
+    \end{example}
+    \begin{solution}
+        
+    \end{solution}
+\end{problembox}
+
+\subsection*{线性规划问题}
+线性规划问题也是送分的一部分，求解线性规划往往分三步：从现实问题中构建线性规划问题（数学建模） $\to$ 线性规划问题标准化 $\to $ 求解线性规划问题。实际题目中往往只会让我们求其中的某一步或两步，这里重点讲解后两步：
+\paragraph{线性规划问题的标准形式}
+一个标准的线性规划往往分为三个部分：
+\begin{enumerate}
+    \item 最小化目标函数：$\min z = f(x_i)$，{\color{red} 如果题目给的是最大化目标函数，则可添加一个负号使其变为最小化}；
+    \item 等式约束：$\vec{A} \vec{x} = \vec{b}$，{\color{red} 往往题目给的是不等式，这时候我们只需在一侧加上松弛变量（非负）$s_i$ 即可变为等式}，值得注意的是 $\vec{A}\vec{x} = \vec{b}$ 往往是一个不定方程组；
+    \item 非负变量：$x_i,s_i\geqslant 0$，{\color{red} 引入松弛变量要注意变量非负，如遇到负的自变量 $x_i$ ，可做变换 $x_i \to -x_i$，如遇到无下界自变量 $x_j$，可做变换 $x_j = x_j^+ - x_j^-$，来使得 $x_j^+,x_j^-$ 均非负但 $x_j$ 可取任意值}.
+\end{enumerate}
+\paragraph{标准线性规划问题的求解}
+标准线性规划问题的求解可以采用求基可行解，也可考虑单纯形法，后者基本不考，因此不做讲解。\footnote{在自变量数量为 2 时还可以直接在平面直角坐标系画图求解，这是高中教材删去的一部分，这里不便展示但希望大家都能掌握。该题在 2024 Spring 中出现过一次。}这里展示基可行解的核心思想：
+
+我们知道等式约束 $\vec{A}\vec{x}=\vec{b}$ 往往是一个不定方程（未知数数量>等式数量），因此{\color{red} 基解就是选取与等式数量相等的未知数，来求解方程，并通过非负变量条件判断该解是否可行. } 通过一个题目我们可以快速上手这类题目：
+\begin{problembox}
+    \begin{example}
+    (2023 Spring) 
+    设某商家需要把某商品从 $A_1, A_2$ 地运输至 $B_1, B_2$ 地，已知 $A_1, A_2$ 地商品的库存量分别为 $u_1, u_2$，$B_1, B_2$ 地商品的需求量分别为 $v_1, v_2$，其中 $u_1 + u_2 > v_1 + v_2$，并且把商品从 $A_i$ 运输至 $B_j$ 所需费用为 $w_{ij}$（元/单位数量）。商家希望运输费用最少，请为上述问题建立线性规划模型，并把线性规划问题表示为标准形式
+    \[ \min_{Ax=b \parallel x \geq 0} c^T x. \]
+    \end{example}
+    \begin{solution}
+        
+    \end{solution}
+\end{problembox}
+

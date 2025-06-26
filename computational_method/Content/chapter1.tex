@@ -1,7 +1,19 @@
-\chapter{插值}
-插值法往往是用一组多项式来表示一个满足特定条件的函数 $f(x)$，其中特殊条件往往是函数 $f(x)$ 或其导数在某点的值. 另外，{\color{red} 本指南的求和部分默认为 $0$ 到 $n-1$ 共 $n$ 个数。}
+\chapter{函数拟合}
+函数拟合是指用一组特定的函数的线性组合来表示一个满足特定条件的函数 $f(x)$，其中特殊条件往往是函数 $f(x)$ 或其导数在某点的值.
 
-\section{Lagrange 插值}
+首先我们写出拟合样本点函数的问题：
+\begin{problembox}
+    已知一组样本点 $\{x_i,y_i = f(x_i),\, i=0,1,\dots,m\}$，确定拟合函数所在的线性空间（也称为“函数类”） $\Phi = \mathrm{span} \{\varphi_0, \varphi_2,\dots,\varphi_n\}$，其中 $\{\varphi_i\}$ 可以看作函数的一组基，求函数 $\varphi \in \Phi$ 满足约束条件：
+    \[
+        \varphi(x_i) = f(x_i).
+    \]
+    且某种误差范数 $E = \|\varphi(x)-f(x)\|$ 最小.
+\end{problembox} 
+
+下面我们就来根据不同的 $\Phi$ 和误差范数 $E$ 介绍几种不同的函数拟合方式.
+
+\section{插值法}
+\subsection{Lagrange 插值}
 我们考虑一组多项式作为函数 $f(x)$ 的基：
 \[
     l_i(x) = \dfrac{\prod_{k\neq i}(x-x_k)}{\prod_{k\neq i}(x_i-x_k)}.
@@ -22,5 +34,27 @@
     \end{example}
 \end{problembox}
 
-\section{Newton 插值}
+\subsection{Newton 插值}
 
+\subsection{Hermite 插值}
+
+
+\section{最小二乘拟合}
+最小二乘法是指误差范数为 $2$-范数的一种求解方式。由 $\varphi(x) = \sum_i a_i \varphi_i(x)$ ，我们可以先将约束条件写为：
+\[
+    \mathbf{A} = (\varphi_i(x_j)),\quad \vec{x} = (a_i)^\top,\quad \vec{b} = (y_i)^\top,
+\]
+\[
+    \Longrightarrow \vec{A}\vec{x} - \vec{b} = 0.
+\]
+实际上对于 $n\neq m$ 时上述方程不一定有解，此时最小二乘法要求 $Q =E^2 = \|\varphi(x)-f(x)\|_2^2 =  \sum_i (\varphi(x_i)-y_i)^2 = \|\vec{A}\vec{x}-\vec{b}\|^2$ 最小. 
+
+将范数展开：
+\[
+    Q (\vec{x}) = \|\vec{A}\vec{x}-\vec{b}\|_2^2 = \vec{x}^\top \vec{A}^\top \vec{A}\vec{x}-2\vec{x}^\top \vec{A}\vec{b} +\vec{b}^\top \vec{b}.
+\]
+考虑 $Q$ 取极值有：
+\[
+    \dfrac{\dd Q}{\dd \vec{x}} = 2\vec{A}^\top \vec{A}\vec{x} - 2\vec{A}^\top \vec{b} = 0\Longrightarrow \vec{A}^\top \vec{A}\vec{x} = \vec{A}^\top \vec{b}.
+\]
+以此我们就可以求出对应的系数 $\vec{x}$ 并确定 $\varphi(x)$.
