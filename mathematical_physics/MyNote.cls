@@ -1,11 +1,13 @@
 % MyNote.cls - A XeLaTeX Class for Math and Physics Notes v0.0.1
 
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{MyNote}[2024/06/23 v3.1 A XeLaTeX Note Class - Final fix for fancyhdr]
+\ProvidesClass{MyNote}[2024/07/02 v0.0.1 A XeLaTeX Note Class]
 
 % --- 基类和编码 ---
 \LoadClass[a4paper, oneside]{ctexbook}
-\setCJKmainfont[Mapping = fullwidth-stop,BoldFont=SourceHanSerifSC-Bold, ItalicFont=方正楷体简体]{SourceHanSerifSC-Regular}
+\setCJKmainfont{Source Han Serif SC}
+\setCJKsansfont{Source Han Sans SC}
+\newCJKfontfamily\kaishufamily{FondolKai}
 
 % --- 常用宏包 ---
 \RequirePackage{xparse}
@@ -120,8 +122,8 @@
 \renewcommand{\theexercise}{\thechapter.\arabic{exercise}}
 
 \theoremstyle{plain}
-\newtheorem*{solution}{解}
-\renewcommand{\proofname}{证明}
+\newtheorem*{solution}{\bfseries 解}
+\renewcommand{\proofname}{\bfseries 证明}
 
 
 \newtcolorbox{problembox}{
